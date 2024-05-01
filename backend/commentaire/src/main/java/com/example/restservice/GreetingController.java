@@ -1,108 +1,112 @@
 package com.example.restservice;
 
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.boot.CommandLineRunner;
-
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.example.restservice.json.CreateQuestion;
-import com.example.restservice.json.CreateQuestionnaire;
+import com.example.restservice.json.CreateCommentary;
+import com.example.restservice.json.CreatePost;
+import com.example.restservice.json.GetCommentsByPostId;
+import com.example.restservice.model.Comment;
+import com.example.restservice.model.Post;
+import com.example.restservice.service.CommentService;
+import com.example.restservice.service.PostService;
 
-import com.example.restservice.classe.Questionnaire;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.concurrent.atomic.AtomicLong;
-
-import com.example.restservice.json.GetAllQuestionnaires;
-import com.example.restservice.json.GetAllQuestions;
-import com.example.restservice.json.GetQuestionnaire;
-import com.example.restservice.classe.ListeQuestionnaire;
-import com.example.restservice.classe.ListeQuestions;
-import com.example.restservice.classe.Question;
 
 import org.springframework.web.bind.annotation.PathVariable;
-import java.util.List;
+
 
 @RestController
+@CrossOrigin(origins = "*")
+@ComponentScan(basePackages = "com.example.restservice.service")
 public class GreetingController implements CommandLineRunner {
 
 
-	protected ListeQuestionnaire questionnaires = new ListeQuestionnaire();
+	private final PostService postService;
+	private final CommentService commentService;
 
-	protected ListeQuestions question = new ListeQuestions();
-
-	private final AtomicLong counter = new AtomicLong();
-
-	@PostMapping("/create/questionnaire")
-	public CreateQuestionnaire createQuestionnaire(@RequestBody Questionnaire questionnaireRequest) {
-
-		String id = String.valueOf(counter.incrementAndGet());
-
-		CreateQuestionnaire questionnaire = CreateQuestionnaire.createQuestionnaire(id,
-				questionnaireRequest.getTitle());
-
-		question.createqcm(id);
-
-		questionnaires.addQuestionnaire(id, questionnaireRequest.getTitle());
-
-		return questionnaire;
+	public GreetingController(PostService postService, CommentService commentService) {
+		this.postService = postService;
+		this.commentService = commentService;
 	}
 
-	@GetMapping("/")
-	public String getAllAlbums() {
-		return "Hello, world!";
 
-	}
+	@GetMapping("/posts")
+    public Flux<Post> getAllPost() {
+        return postService.getAllPost();
+    }
+
 	
-	@CrossOrigin(origins = "http://localhost:4200/")
-	@GetMapping("/questionnaires")
-	public GetAllQuestionnaires getAllQuestionnaires() {
-		return GetAllQuestionnaires.createQuestionnaire(questionnaires.getQuestionnaires());
+
+	@GetMapping("/post/{post_id}")
+	public Mono<Post> getPost(@PathVariable String post_id) {
+		return postService.getPost(post_id);
 	}
 
+	@PostMapping("/create/post")
+	public CreatePost createPost(@RequestBody Post post) {
+		return new CreatePost(postService.createPost(post).block());
+	}
+
+	@PostMapping("/create/comment/{post_id}")
+	public CreateCommentary createCommentary(@PathVariable String post_id, @RequestBody Comment comment) {
+		
+		String commentId = UUID.randomUUID().toString();
+		while (!this.commentService.CommentIdNotExists(commentId)) {
+			commentId = UUID.randomUUID().toString();
+		}
+		comment.setComment_id(commentId);
+		comment.setDate(new Date().toString());
 
 
-	@PostMapping("/create/question/{id}")
-	public CreateQuestion createQuestion(@RequestBody Question questionRequest, @PathVariable String id) {
-
+		return new CreateCommentary(commentService.createCommentary(post_id, comment).block());
 		
 
-		CreateQuestion questionnaire = CreateQuestion.createQuestion(questionRequest.getQuestion(), questionRequest.getChoix1(), questionRequest.getChoix2(), questionRequest.getChoix3(), questionRequest.getChoix4(), questionRequest.getResponse());
-
-		question.addQuestion(id, questionRequest.getQuestion(), questionRequest.getChoix1(), questionRequest.getChoix2(), questionRequest.getChoix3(), questionRequest.getChoix4(), questionRequest.getResponse());
-		
-
-		return questionnaire;
 	}
 
-	@GetMapping("/questions/{id}")
-	public GetAllQuestions getAllQuestions(@PathVariable String id) {
-
-		List<Question> qcm = question.getQuestions(id);
-		return GetAllQuestions.getAllQuestions(qcm);
+	@GetMapping("/comments/{post_id}")
+	public GetCommentsByPostId getComments(@PathVariable String post_id) {
+		return new GetCommentsByPostId(commentService.getCommentByPostId(post_id).collectList().block());
 	}
-	@CrossOrigin(origins = "*")
-	@GetMapping("/questionnaire/{id}")
-	public GetQuestionnaire getQuestionnaire(@PathVariable String id) {
 
-		Questionnaire qcm = questionnaires.getQuestionnaire(id);
-		return GetQuestionnaire.getQuestionnaire(qcm);
+	@DeleteMapping("/delete/comment/{comment_id}")
+	public Void deleteComment(@PathVariable String comment_id) {
+		return commentService.deleteComment(comment_id).block();
+	}
+
+	@DeleteMapping("/delete/post/{post_id}")
+	public Void deletePost(@PathVariable String post_id) {
+		return postService.deletePost(post_id).block();
 	}
 
 
+	@GetMapping("/purge")
+	public Void purge() {
+		return commentService.purge().block();
+	}
 
 
+
+
+	
+	
+	
+	
+
+	
+	
 	
 
 	public void run(String... args) throws Exception {
