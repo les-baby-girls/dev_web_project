@@ -1,28 +1,43 @@
-require('dotenv').config();  // Cette ligne charge les variables d'environnement du fichier .env
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GitHubStrategy = require('passport-github').Strategy; // Ajout de la stratégie GitHub
+const path = require('path');
 
-const app = express();
-app.use(express.json());
+const index = express();
+index.use(express.json());
+index.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-    secret: process.env.SESSION_SECRET,  // Utilise la variable d'environnement
+index.use(session({
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+index.use(passport.initialize());
+index.use(passport.session());
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,  // Utilise la variable d'environnement
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,  // Utilise la variable d'environnement
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    // Ici, vous pouvez implémenter la logique pour lier le profil Google à un utilisateur dans votre base de données
+    console.log("Profil connecté:", profile);
+    return cb(null, profile);
+  }
+));
+
+// Configuration de la stratégie GitHub OAuth
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log("Profil connecté (GitHub):", profile);
     return cb(null, profile);
   }
 ));
@@ -35,19 +50,25 @@ passport.deserializeUser((id, done) => {
   done(null, { id: id });
 });
 
-// Routes pour l'authentification Google
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
+// Route d'authentification Google OAuth
+index.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
+// Callback après l'authentification Google
+index.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
     res.redirect('/');
-  });
+});
 
-// Routes pour la gestion des utilisateurs
-app.get('/', (req, res) => {
-    res.send('Bonjour le monde!');
+// Route d'authentification GitHub OAuth
+index.get('/auth/github', passport.authenticate('github'));
+
+// Callback après l'authentification GitHub
+index.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+    res.redirect('/');
+});
+
+// Route de login échoué
+index.get('/login', (req, res) => {
+    res.send('Échec lors de la connexion. Essayez de nouveau !');
 });
 
 let utilisateurs = [
@@ -55,11 +76,13 @@ let utilisateurs = [
     { id: 2, nom: 'Bob' }
 ];
 
-app.get('/utilisateurs', (req, res) => {
+// API pour obtenir la liste des utilisateurs
+index.get('/utilisateurs', (req, res) => {
     res.status(200).json(utilisateurs);
 });
 
-app.get('/utilisateurs/:id', (req, res) => {
+// API pour obtenir un utilisateur par ID
+index.get('/utilisateurs/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const utilisateur = utilisateurs.find(u => u.id === id);
     if (utilisateur) {
@@ -69,7 +92,8 @@ app.get('/utilisateurs/:id', (req, res) => {
     }
 });
 
-app.post('/utilisateurs', (req, res) => {
+// API pour ajouter un utilisateur
+index.post('/utilisateurs', (req, res) => {
     const utilisateur = {
         id: utilisateurs.length + 1,
         nom: req.body.nom
@@ -78,7 +102,8 @@ app.post('/utilisateurs', (req, res) => {
     res.status(201).send(utilisateur);
 });
 
-app.put('/utilisateurs/:id', (req, res) => {
+// API pour modifier un utilisateur
+index.put('/utilisateurs/:id', (req, res) => {
     const id = parseInt(req.params.id);
     let utilisateur = utilisateurs.find(u => u.id === id);
     if (utilisateur) {
@@ -89,14 +114,15 @@ app.put('/utilisateurs/:id', (req, res) => {
     }
 });
 
-app.delete('/utilisateurs/:id', (req, res) => {
+// API pour supprimer un utilisateur
+index.delete('/utilisateurs/:id', (req, res) => {
     const id = parseInt(req.params.id);
     utilisateurs = utilisateurs.filter(u => u.id !== id);
     res.status(204).send();
 });
 
-// Démarrer le serveur
+// Démarrage du serveur
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+index.listen(PORT, () => {
     console.log(`Serveur en écoute sur le port ${PORT}`);
 });
