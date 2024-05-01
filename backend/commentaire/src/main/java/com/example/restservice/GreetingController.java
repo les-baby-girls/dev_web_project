@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.restservice.json.CreateCommentary;
-import com.example.restservice.json.CreatePost;
+import com.example.restservice.json.DeleteComment;
+import com.example.restservice.json.DeletePost;
+import com.example.restservice.json.EditComment;
 import com.example.restservice.json.GetCommentsByPostId;
 import com.example.restservice.model.Comment;
 import com.example.restservice.model.Post;
@@ -56,12 +58,16 @@ public class GreetingController implements CommandLineRunner {
 	}
 
 	@PostMapping("/create/post")
-	public CreatePost createPost(@RequestBody Post post) {
-		return new CreatePost(postService.createPost(post).block());
+	public Mono<Post> createPost(@RequestBody Post post) {
+		if (postService.getPost(post.getPost_id()).block() == null) {
+			return postService.createPost(post);
+		} else {
+			return null;
+		}
 	}
 
 	@PostMapping("/create/comment/{post_id}")
-	public CreateCommentary createCommentary(@PathVariable String post_id, @RequestBody Comment comment) {
+	public Mono<Comment> createCommentary(@PathVariable String post_id, @RequestBody Comment comment) {
 		
 		String commentId = UUID.randomUUID().toString();
 		while (!this.commentService.CommentIdNotExists(commentId)) {
@@ -71,7 +77,7 @@ public class GreetingController implements CommandLineRunner {
 		comment.setDate(new Date().toString());
 
 
-		return new CreateCommentary(commentService.createCommentary(post_id, comment).block());
+		return commentService.createCommentary(post_id, comment);
 		
 
 	}
@@ -82,13 +88,36 @@ public class GreetingController implements CommandLineRunner {
 	}
 
 	@DeleteMapping("/delete/comment/{comment_id}")
-	public Void deleteComment(@PathVariable String comment_id) {
-		return commentService.deleteComment(comment_id).block();
+	public DeleteComment deleteComment(@PathVariable String comment_id) {
+		if (!commentService.CommentIdNotExists(comment_id)) {
+			commentService.deleteComment(comment_id).block();
+			return DeleteComment.deleteComment("SUCCESS");
+		} else {
+		return DeleteComment.deleteComment("ERROR");
+	} 
 	}
 
 	@DeleteMapping("/delete/post/{post_id}")
-	public Void deletePost(@PathVariable String post_id) {
-		return postService.deletePost(post_id).block();
+	public DeletePost deletePost(@PathVariable String post_id) {
+		if (postService.getPost(post_id).block() != null) {
+			postService.deletePost(post_id).block();
+			return DeletePost.deletePost("SUCCESS");
+		}
+		else  {
+			return DeletePost.deletePost("ERROR");
+		}
+	}
+
+	@PutMapping("edit/comment/{comment_id}")
+	public EditComment editComment(@PathVariable String comment_id, @RequestBody Comment editedText) {
+		
+		if (!commentService.CommentIdNotExists(comment_id)) {
+			commentService.editComment(comment_id, editedText.getText()).block();
+			return EditComment.editComment("SUCCESS");
+		} else {
+			return EditComment.editComment("ERROR");
+		}
+		
 	}
 
 

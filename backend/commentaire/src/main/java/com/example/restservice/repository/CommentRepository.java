@@ -28,5 +28,8 @@ public interface CommentRepository extends ReactiveNeo4jRepository<Comment, Stri
     @Query("MATCH (p:Post)-[r:GET_COMMENTED]->(c:Comment {comment_id: $commentId}) DELETE r, c")
     Mono<Void> delete_comment(@Param("commentId") String comment_id);
 
+    @Query("MATCH (c:Comment {comment_id: $comment_id}) SET c.text = $modified_text RETURN c;")
+    Mono<Comment> edit_comment(@Param("comment_id") String comment_id, @Param("modified_text") String modified_text);
+
     
 }

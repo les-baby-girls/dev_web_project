@@ -42,6 +42,10 @@ public class CommentService {
 		return commentRepository.delete_comment(commentId);
 	}
 
+	public Mono<Comment> editComment(String commentId, String editedText) {
+		return commentRepository.edit_comment(commentId, editedText);
+	}
+
 
 
 }
