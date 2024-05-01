@@ -3,12 +3,15 @@ const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GitHubStrategy = require('passport-github').Strategy; // Ajout de la stratégie GitHub
+const path = require('path');
 
 const index = express();
 index.use(express.json());
+index.use(express.static(path.join(__dirname, 'public')));
 
 index.use(session({
-    secret: process.env.SESSION_SECRET, // Assurez-vous que cette clé est bien définie dans .env
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
@@ -22,7 +25,19 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log("Profil connecté:", profile); // Log du profil à la connexion
+    console.log("Profil connecté:", profile);
+    return cb(null, profile);
+  }
+));
+
+// Configuration de la stratégie GitHub OAuth
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log("Profil connecté (GitHub):", profile);
     return cb(null, profile);
   }
 ));
@@ -35,18 +50,20 @@ passport.deserializeUser((id, done) => {
   done(null, { id: id });
 });
 
-// Authentification de Google OAuth
+// Route d'authentification Google OAuth
 index.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // Callback après l'authentification Google
 index.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    console.log("Utilisateur connecté:", req.user); // Log de l'utilisateur connecté après authentification
     res.redirect('/');
 });
 
-// Page d'accueil
-index.get('/', (req, res) => {
-    res.send('Bonjour le monde!');
+// Route d'authentification GitHub OAuth
+index.get('/auth/github', passport.authenticate('github'));
+
+// Callback après l'authentification GitHub
+index.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+    res.redirect('/');
 });
 
 // Route de login échoué
