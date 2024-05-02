@@ -72,8 +72,8 @@ index.get('/login', (req, res) => {
 });
 
 let utilisateurs = [
-    { id: 1, nom: 'Alice' },
-    { id: 2, nom: 'Bob' }
+    { user_id: 1, nom: 'Alice', prenom: "Louis", email: 'james@gmail.com' },
+    { user_id: 2, nom: 'Bob' }
 ];
 
 // API pour obtenir la liste des utilisateurs
