@@ -15,10 +15,10 @@ import lombok.*;
 @Node
 public class Post {
     @Id
-    String post_id;
+    private String post_id;
     
 
-    @Relationship(type = "GET_COMMENTED")
+    @Relationship(type = "GET_COMMENTED",direction = Relationship.Direction.INCOMING)
     private List<Comment> comments;
 
 

@@ -31,7 +31,7 @@ public class CommentService {
 	}
 
 	public Mono<Comment> createCommentary(String postId, Comment comments) {
-		return commentRepository.createComment(postId, comments.getComment_id(), comments.getAuthor(), comments.getText(), comments.getDate());
+		return commentRepository.createComment(postId, comments.getComment_id(), comments.getAuthor_id(), comments.getText(), comments.getDate());
 	}
 
 	public Mono<Void> purge() {

@@ -19,8 +19,8 @@ public interface CommentRepository extends ReactiveNeo4jRepository<Comment, Stri
     @Query("MATCH (p:Post {post_id: $postId})-[r:GET_COMMENTED]->(c:Comment) RETURN c")
     Flux<Comment> getCommentsByPostId(@Param("postId") String id);
 
-    @Query("MATCH (p:Post {post_id: $postId}) CREATE (c:Comment {comment_id: $id, author: $author, text: $text, date: $date}) CREATE (p)-[:GET_COMMENTED]->(c) RETURN c")
-    Mono<Comment> createComment(@Param("postId") String post_id, @Param("id") String comment_id, @Param("author") String author, @Param("text") String text, @Param("date") String date);
+    @Query("MATCH (p:Post {post_id: $postId}) CREATE (c:Comment {comment_id: $id, author_id: $author_id, text: $text, date: $date}) CREATE (p)-[:GET_COMMENTED]->(c) RETURN c")
+    Mono<Comment> createComment(@Param("postId") String post_id, @Param("id") String comment_id, @Param("author_id") String author_id, @Param("text") String text, @Param("date") String date);
 
     @Query("MATCH (n) DETACH DELETE n")
     Mono<Void> destroy();
