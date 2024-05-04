@@ -4,22 +4,27 @@ package com.example.restservice;
 import java.util.Date;
 import java.util.UUID;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
+
+import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.example.restservice.json.DeleteComment;
 import com.example.restservice.json.DeletePost;
 import com.example.restservice.json.EditComment;
 import com.example.restservice.json.GetCommentsByPostId;
+
 import com.example.restservice.model.Comment;
 import com.example.restservice.model.Post;
+
 import com.example.restservice.service.CommentService;
 import com.example.restservice.service.PostService;
 
@@ -27,13 +32,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
-import org.springframework.web.bind.annotation.PathVariable;
-
-
 @RestController
 @CrossOrigin(origins = "*")
 @ComponentScan(basePackages = "com.example.restservice.service")
-public class GreetingController implements CommandLineRunner {
+public class GreetingController {
 
 
 	private final PostService postService;
@@ -43,20 +45,7 @@ public class GreetingController implements CommandLineRunner {
 		this.postService = postService;
 		this.commentService = commentService;
 	}
-
-
-	@GetMapping("/posts")
-    public Flux<Post> getAllPost() {
-        return postService.getAllPost();
-    }
-
-	
-
-	@GetMapping("/post/{post_id}")
-	public Mono<Post> getPost(@PathVariable String post_id) {
-		return postService.getPost(post_id);
-	}
-
+ 	
 	@PostMapping("/create/post")
 	public Mono<Post> createPost(@RequestBody Post post) {
 		if (postService.getPost(post.getPost_id()).block() == null) {
@@ -120,25 +109,4 @@ public class GreetingController implements CommandLineRunner {
 		
 	}
 
-
-	@GetMapping("/purge")
-	public Void purge() {
-		return commentService.purge().block();
-	}
-
-
-
-
-	
-	
-	
-	
-
-	
-	
-	
-
-	public void run(String... args) throws Exception {
-
-	}
 }
