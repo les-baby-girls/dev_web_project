@@ -9,9 +9,9 @@ def get_db_connection():
         connection = mysql.connector.connect(
             host='localhost',  # Ensure this is the correct host address
             port=3306,         # Ensure this is the correct port
-            database='sys',  # Replace with your database name
+            database='images',  # Replace with your database name
             user='root',  # Replace with your username
-            password='my-secret-pw'  # Replace with your password
+            password='root'  # Replace with your password
         )
         return connection
     except Error as e:
