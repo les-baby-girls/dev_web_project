@@ -6,15 +6,20 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github').Strategy; // Ajout de la stratégie GitHub
 const path = require('path');
 
+const cors = require('cors'); // Import the cors middleware
+
 const index = express();
 index.use(express.json());
 index.use(express.static(path.join(__dirname, 'public')));
+
+index.use(cors()); // Enable CORS for all routes
 
 index.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
+
 
 index.use(passport.initialize());
 index.use(passport.session());

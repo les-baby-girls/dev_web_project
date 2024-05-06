@@ -18,7 +18,7 @@ def get_db_connection():
         print("Erreur lors de la connexion à MySQL:", e)
         return None
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     conn = get_db_connection()
     print(conn)
