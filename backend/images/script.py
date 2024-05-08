@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 import mysql.connector
 from mysql.connector import Error
 
@@ -14,7 +14,7 @@ def get_db_connection():
         )
 
         if conn is None:
-            Error("Failed to connect to MySQL")
+            raise Error("Failed to connect to MySQL")
 
         cursor = conn.cursor()
 
@@ -29,7 +29,7 @@ def get_db_connection():
         # Create table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS images.posts (
-                id TEXT PRIMARY KEY,
+                post_id TEXT PRIMARY KEY,
                 titre VARCHAR(255),
                 description TEXT,
                 image TEXT,
@@ -40,7 +40,7 @@ def get_db_connection():
 
         return conn
     
-    except Error as e:
+    except Exception as e:
         print("Erreur lors de la connexion à MySQL:", e)
         return None
 
@@ -60,12 +60,12 @@ def index():
 def get_post_by_id(post_id):
     conn = get_db_connection()
     if conn is None:
-        return "Failed to connect to MySQL"
+        return  jsonify({"result": "FAILED"})
 
     cursor = conn.cursor()
 
     query = """
-        SELECT * FROM posts
+        SELECT * FROM images.posts
         WHERE post_id = '%s'
     """
     cursor.execute(query, (post_id,))
@@ -73,30 +73,28 @@ def get_post_by_id(post_id):
 
     if result:
         
-        return result
+        return jsonify({"result": "FAILED"})
     else:
-        return None
+        return jsonify(result)
 
 @app.route('/posts', methods=['GET'])
 def get_posts():
     conn = get_db_connection()
     if conn is None:
-        return {
-        "result": "FAILED"
-    }
+        return jsonify({"result": "FAILED"})
 
     cursor = conn.cursor()
 
     query = """
-        SELECT * FROM posts
+        SELECT * FROM images.posts
     """
     cursor.execute(query)
     result = cursor.fetchall()
 
-    return {
+    return jsonify({
         "result": "SUCCESS",
         "posts": result
-    }
+    })
 
 
 if __name__ == '__main__':
