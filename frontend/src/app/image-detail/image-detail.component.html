@@ -1,0 +1,13 @@
+<div class="image-detail">
+    <div class="image-container">
+      <img [src]="imageUrl" alt="Image">
+    </div>
+    <div *ngIf="comments.length > 0" class="comments-container">
+      <h2>Commentaires</h2>
+      <ul>
+        <li *ngFor="let comment of comments">
+          <p>{{ comment.text }} - {{ comment.author_id }} ({{ comment.date | date }})</p>
+        </li>
+      </ul>
+    </div>
+</div>
