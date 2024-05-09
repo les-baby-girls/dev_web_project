@@ -1,0 +1,33 @@
+:host {
+  --content-padding: 10px;
+  position: relative; /* Ajoutez une position relative au conteneur parent */
+}
+
+header {
+  display: flex;
+  justify-content: space-between; /* Utilisez justify-content pour aligner les éléments de manière horizontale */
+  align-items: center; /* Utilisez align-items pour aligner les éléments de manière verticale */
+  height: 60px;
+  padding: var(--content-padding);
+  box-shadow: 0px 5px 25px var(--shadow-color);
+}
+
+.brand-name {
+  display: flex;
+  align-items: center; /* Alignez le contenu verticalement */
+}
+
+.brand-logo {
+  width: 20%;
+}
+
+.connect-button {
+  padding: 10px;
+  border: solid 1px var(--primary-color);
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  position: absolute; /* Position absolue par rapport au conteneur parent */
+  top: calc(var(--content-padding) + 10px); /* Décalage du haut du conteneur parent */
+  right: var(--content-padding); /* Décalage de la droite du conteneur parent */
+}

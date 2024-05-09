@@ -2,8 +2,8 @@ package com.example.restservice.json;
 
 
 
-public record DeleteComment(String processus) {
-    public static DeleteComment deleteComment(String processus) {
-        return new DeleteComment(processus);
+public record DeleteComment(String result) {
+    public static DeleteComment deleteComment(String result) {
+        return new DeleteComment(result);
     }
 }
