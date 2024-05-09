@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "npm i && ng serve",
+    "build": "npm i && ng build",
+    "watch": "npm i && ng build --watch --configuration development",
+    "test": "npm i && ng test"
   },
   "private": true,
   "dependencies": {
