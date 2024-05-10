@@ -9,7 +9,7 @@ def get_db_connection():
     try:
         conn = mysql.connector.connect(
             user='root',  # Replace with your username
-            password='root',  # Replace with your password
+            password='my-secret-pw',  # Replace with your password
             host='localhost',  # Ensure this is the correct host address
         )
 
@@ -29,7 +29,7 @@ def get_db_connection():
         # Create table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS images.posts (
-                post_id TEXT PRIMARY KEY,
+                post_id VARCHAR(32) PRIMARY KEY,
                 titre VARCHAR(255),
                 description TEXT,
                 image TEXT,
