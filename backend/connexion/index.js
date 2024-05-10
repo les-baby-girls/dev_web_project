@@ -111,7 +111,7 @@ index.get('/', (req, res) => {
 index.get('/utilisateur-connecte', (req, res) => {
     if (req.isAuthenticated()) {
         res.status(200).json({
-            username: req.user.nom // ou req.user.pseudo, selon ce que vous utilisez comme nom d'utilisateur
+            username: req.user.pseudo // ou req.user.pseudo, selon ce que vous utilisez comme nom d'utilisateur
         });
     } else {
         res.status(404).json({ message: "Utilisateur non connecté" });
