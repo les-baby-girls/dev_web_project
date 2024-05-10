@@ -6,8 +6,6 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github').Strategy; 
 const path = require('path');
 
-const cors = require('cors'); // Import the cors middleware
-
 const index = express();
 index.use(express.json());
 index.use(express.static(path.join(__dirname, 'public')));
@@ -15,7 +13,6 @@ index.use(express.static(path.join(__dirname, 'public')));
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/test');
 
-// Définition du schéma de l'utilisateur
 const userSchema = new mongoose.Schema({
     nom: String,
     prenom: String,
@@ -31,7 +28,6 @@ index.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
 
 index.use(passport.initialize());
 index.use(passport.session());
@@ -90,22 +86,60 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return done(null, false);
+    }
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+});
+
+index.get('/logout', (req, res) => {
+    req.logout(() => {
+        res.redirect('/');
+    });
+});
+
+index.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+index.get('/utilisateur-connecte', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.status(200).json({
+            username: req.user.nom // ou req.user.pseudo, selon ce que vous utilisez comme nom d'utilisateur
+        });
+    } else {
+        res.status(404).json({ message: "Utilisateur non connecté" });
+    }
 });
 
 index.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 index.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect('/');
+    const userInfo = {
+        nom: req.user.nom,
+        prenom: req.user.prenom,
+        pseudo: req.user.pseudo,
+        email: req.user.email,
+        avatar: req.user.avatar
+    };
+    res.redirect(`http://localhost:4200?user=${JSON.stringify(userInfo)}`);
 });
 
 index.get('/auth/github', passport.authenticate('github'));
 
 index.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect('/');
+    const userInfo = {
+        pseudo: req.user.pseudo,
+        email: req.user.email,
+        avatar: req.user.avatar
+    };
+    res.redirect(`http://localhost:4200?user=${JSON.stringify(userInfo)}`);
 });
 
 index.get('/login', (req, res) => {
