@@ -2,26 +2,25 @@ from flask import Flask, request, jsonify, render_template_string
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
+import uuid
 import mysql.connector
 from mysql.connector import Error
 
-import uuid
-
 app = Flask(__name__)
 
-# Configure the directory where images will be stored
+# Configuration du répertoire où les images seront stockées
 app.config['UPLOAD_FOLDER'] = 'static/images'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Ensure the upload folder exists
+# Assurer que le dossier de téléchargement existe
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 def allowed_file(filename):
-    """Check if the file has one of the allowed extensions"""
+    """ Vérifier si le fichier a une des extensions autorisées """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 def init_db():
-    """Initialize the database and create tables if they don't exist"""
+    """ Initialiser la base de données et créer les tables si elles n'existent pas """
     try:
         conn = mysql.connector.connect(user='root', password='my-secret-pw', host='localhost')
         cursor = conn.cursor()
@@ -29,7 +28,7 @@ def init_db():
         cursor.execute("USE images")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS posts (
-                post_id VARCHAR(32) PRIMARY KEY,
+                post_id VARCHAR(36) PRIMARY KEY,
                 titre VARCHAR(255),
                 description TEXT,
                 image VARCHAR(255),
@@ -38,59 +37,58 @@ def init_db():
         """)
         conn.commit()
     except Error as e:
-        print(f"Error initializing database: {e}")
+        print(f"Erreur lors de l'initialisation de la base de données : {e}")
     finally:
         if conn.is_connected():
             cursor.close()
             conn.close()
 
 def get_db_connection():
-    """Get a connection to the database"""
+    """ Obtenir une connexion à la base de données """
     try:
         return mysql.connector.connect(user='root', password='my-secret-pw', host='localhost', database='images')
     except Error as e:
-        print(f"Error connecting to MySQL: {e}")
+        print(f"Erreur de connexion à MySQL : {e}")
         return None
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    """Handle the upload of a file"""
+    """ Gérer le téléchargement d'un fichier """
     if request.method == 'POST' and 'photo' in request.files:
         file = request.files['photo']
         if file.filename == '':
-            return jsonify(message="No selected file"), 400
+            return jsonify(message="Aucun fichier sélectionné"), 400
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
             url = f"/{file_path}"
             current_date = datetime.now().strftime('%Y-%m-%d')
+            post_id = str(uuid.uuid4())
             conn = get_db_connection()
             if conn:
                 cursor = conn.cursor()
-                id = uuid.uuid4()
-                cursor.execute("INSERT INTO posts (titre, description, image, date) VALUES (%s, %s, %s, %s, %s)",
-                               (id, request.form['titre'], request.form['description'], url, current_date))
+                cursor.execute("INSERT INTO posts (post_id, titre, description, image, date) VALUES (%s, %s, %s, %s, %s)",
+                               (post_id, request.form['titre'], request.form['description'], url, current_date))
                 conn.commit()
-                generated_id = cursor.lastrowid  # Retrieve the auto-generated ID
                 cursor.close()
                 conn.close()
-                return jsonify({'message': 'Image uploaded successfully', 'url': url, 'post_id': generated_id})
+                return jsonify({'message': 'Image téléchargée avec succès', 'url': url, 'post_id': post_id})
             else:
-                return jsonify({'message': 'Failed to connect to database'})
+                return jsonify({'message': 'Échec de la connexion à la base de données'})
         else:
-            return jsonify({'message': 'Invalid file type'}), 400
+            return jsonify({'message': 'Type de fichier invalide'}), 400
 
-    # HTML form for uploading an image
+    # Formulaire HTML pour le téléchargement d'une image
     return render_template_string('''
         <!doctype html>
-        <title>Upload new File</title>
-        <h1>Upload new Image</h1>
+        <title>Télécharger un nouveau fichier</title>
+        <h1>Télécharger une nouvelle image</h1>
         <form method="post" enctype="multipart/form-data" id="uploadForm">
           <input type="file" name="photo">
-          <input type="text" name="titre" placeholder="Title">
+          <input type="text" name="titre" placeholder="Titre">
           <input type="text" name="description" placeholder="Description">
-          <input type="submit" value="Upload">
+          <input type="submit" value="Télécharger">
         </form>
         <script>
             document.getElementById('uploadForm').onsubmit = function(event) {
@@ -103,11 +101,11 @@ def upload():
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
-                    if (data.message === 'Image uploaded successfully') {
-                        document.getElementById('uploadForm').reset();  // Reset the form fields after successful upload
+                    if (data.message === 'Image téléchargée avec succès') {
+                        document.getElementById('uploadForm').reset();  // Réinitialiser les champs du formulaire après le téléchargement réussi
                     }
                 })
-                .catch(error => alert('Error uploading image: ' + error));
+                .catch(error => alert('Erreur lors du téléchargement de l'image : ' + error));
             };
         </script>
     ''')
