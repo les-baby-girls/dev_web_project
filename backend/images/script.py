@@ -108,7 +108,7 @@ def delete_post(post_id):
         if post_exists(post_id):
             cursor = conn.cursor(dictionary=True)   
             
-            cursor.execute("DELETE FROM images.posts WHERE post_id = %s",(post_id))
+            cursor.execute("DELETE FROM images.posts WHERE post_id = %s",(post_id,))
 
             conn.commit()
             cursor.close()
@@ -116,7 +116,6 @@ def delete_post(post_id):
             return jsonify({
                 "result": "SUCCESS"
             })
-        cursor.close()
         conn.close()
         return jsonify({"result": "ERROR", "message": "Post not found"})
     return jsonify({"result": "ERROR", "message": "Failed to connect to the database"})
@@ -125,19 +124,22 @@ def delete_post(post_id):
 @app.route('/edit/post/<post_id>', methods=['PUT'])
 def edit_post(post_id):
     try:
-        titre = request.form['titre']
-        description = request.form['description']
-    except KeyError:
-        return jsonify({"result": "ERROR", "message": "Invalid JSON data"}) 
+        titre = request.get_json()['titre']
+        description = request.get_json()['description']
+    except:
+        return jsonify({"result": "ERROR", "message": "Invalid json format"})
     
     conn = get_db_connection()
-    if conn:
-        cursor = conn.cursor(dictionary=True)     
+    if conn: 
         if post_exists(post_id):
+            cursor = conn.cursor(dictionary=True)    
+
             post = get_post(post_id)
-            if titre:
+            
+            
+            if not titre:
                 description = post['post']['titre']
-            if description:
+            if not description:
                 description = post['post']['description']
             cursor.execute("UPDATE images.posts SET titre = %s, description = %s WHERE post_id = %s", (titre, description, post_id))
 
@@ -145,7 +147,6 @@ def edit_post(post_id):
             cursor.close()
             conn.close()
             return jsonify({"result": "SUCCESS"})
-        cursor.close()
         conn.close()
         return jsonify({"result": "ERROR", "message": "Post not found"})
     return jsonify({"result": "ERROR", "message": "Failed to connect to the database"})

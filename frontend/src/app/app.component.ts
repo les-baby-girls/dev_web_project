@@ -1,13 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
-
+import { Component, OnInit } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterModule,
+    RouterModule
   ],
   template: `
     <main>
@@ -19,17 +17,46 @@ import { Router } from '@angular/router';
       </a>
       <p> BUENOS DIAS </p>
       <section class="content">
+        <p id="username-container">Chargement...</p>
         <router-outlet></router-outlet>
       </section>
     </main>
   `,
   styleUrls: ['./app.component.css'],
 })
-
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'home';
 
   constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.fetchUser();
+  }
+
+  fetchUser() {
+    fetch('http://localhost:3000/utilisateur-connecte')
+      .then(response => {
+        response.json().then(data => {
+        const userContainer = document.getElementById('username-container');
+        console.log(data)
+        if (userContainer) { // Check if userContainer is not null
+          console.log(data.username)
+          if (data.username) {
+            userContainer.innerText = `Utilisateur connecté : ${data.username}`;
+          } else {
+            userContainer.innerText = `Utilisateur connecté : ${data}`;
+          }
+        }
+      })
+    })
+      .catch(error => {
+        console.error('Erreur lors de la récupération de l\'utilisateur connecté :', error);
+        const userContainer = document.getElementById('username-container');
+        if (userContainer) { // Check again in case of an error
+          userContainer.innerText = "Erreur lors de la connexion";
+        }
+      });
+  }
 
   redirectToLoginPage() {
     window.location.href = 'http://localhost:3000';

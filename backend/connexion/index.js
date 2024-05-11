@@ -5,10 +5,15 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github').Strategy; 
 const path = require('path');
+const cors = require("cors");
 
 const index = express();
 index.use(express.json());
 index.use(express.static(path.join(__dirname, 'public')));
+index.use(cors({
+    origin: 'http://localhost:4200', // Autoriser les requêtes depuis localhost:4200
+    credentials: true // Autoriser les requêtes avec des cookies ou des en-têtes d'autorisation
+  }));
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/test');
@@ -110,14 +115,36 @@ index.get('/', (req, res) => {
 });
 
 index.get('/utilisateur-connecte', (req, res) => {
+    console.log(req.isAuthenticated());
     if (req.isAuthenticated()) {
-        res.status(200).json({
-            username: req.user.pseudo
+        return res.status(200).json({
+            username: req.user.pseudo,
         });
     } else {
-        res.status(404).json({ message: "Utilisateur non connecté" });
+        return res.status(200).json({ message: "Utilisateur non connecté" });
     }
 });
+
+index.get('/get-utilisateur-connecte', (req, res) => {
+    fetch("http://localhost:3000/utilisateur-connecte")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            if (data.message === "SUCCESS") {
+                res.status(200).json({
+                    username: data.username
+                });
+            } else {
+                res.status(200).json({ message: "Utilisateur non connecté" });
+            }
+        })
+        .catch(error => {
+            console.error("Erreur lors de la récupération de l'utilisateur connecté :", error);
+            res.status(500).json({ message: "Erreur lors de la récupération de l'utilisateur connecté" });
+        });
+});
+
+
 
 index.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
