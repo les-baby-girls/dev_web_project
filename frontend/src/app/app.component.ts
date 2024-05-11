@@ -34,5 +34,4 @@ export class AppComponent {
   redirectToLoginPage() {
     window.location.href = 'http://localhost:3000';
   }
-
 }

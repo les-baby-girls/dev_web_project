@@ -15,7 +15,7 @@ export class ImageDetailComponent {
   imageUrl: string = '';
   comments: any[] = [];
 
-  constructor(private route: ActivatedRoute, private housingService: HousingService, /*private http: HttpClient*/) {}
+  constructor(private route: ActivatedRoute, private housingService: HousingService) {}
 
   ngOnInit() {
     // Récupérer l'ID de l'image depuis les paramètres de la route
@@ -24,13 +24,16 @@ export class ImageDetailComponent {
       const image = this.housingService.getHousingLocationById(id);
       if (image) {
         this.imageUrl = image.photo;
-/*
+
         // Effectuer la requête HTTP pour récupérer les commentaires
-        this.http.get<any>('http://localhost:8080/comment/' + id).subscribe(response => {
-          if (response && response.ListeComment) {
-            this.comments = response.ListeComment;
-          }
-        });*/
+        fetch('http://localhost:8080/comments/' + id).then(response => {
+          response.json().then(res => {
+            if (res.resultat == "SUCCESS") {
+              this.comments = res.ListeComment;
+            } 
+          })
+        });
+
       }
     });
   }
