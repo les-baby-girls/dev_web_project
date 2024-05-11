@@ -1,12 +1,10 @@
-FROM openjdk:8
+FROM openjdk:21
 
 WORKDIR /app
 
 COPY pom.xml .
 
 COPY target/*.jar .
-
-RUN mvn install
 
 EXPOSE 8080
 
