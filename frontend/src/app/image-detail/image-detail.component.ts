@@ -20,10 +20,10 @@ export class ImageDetailComponent {
   ngOnInit() {
     // Récupérer l'ID de l'image depuis les paramètres de la route
     this.route.params.subscribe(params => {
-      const id = +params['id'];
+      const id = params['id'];
       const image = this.housingService.getHousingLocationById(id);
       if (image) {
-        this.imageUrl = image.photo;
+        this.imageUrl = image.image;
 
         // Effectuer la requête HTTP pour récupérer les commentaires
         fetch('http://localhost:8080/comments/' + id).then(response => {

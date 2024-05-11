@@ -86,13 +86,10 @@ def get_posts():
         post = cursor.fetchall()
         cursor.close()
         conn.close()
-        if post:
-            return {
+        return {
             "posts": post,
             "result": "SUCCESS"
             }
-
-        return jsonify({"result": "ERROR", "message": "Post not found"})
     return jsonify({"result": "ERROR", "message": "Failed to connect to the database"})
 
 #edit post

@@ -23,7 +23,7 @@ import { Router } from '@angular/router';
   <app-housing-location
     *ngFor="let housingLocation of housingLocationList"
     [housingLocation]="housingLocation"
-    (click)="goToImageDetail(housingLocation.id)">
+    (click)="goToImageDetail(housingLocation.post_id)">
   </app-housing-location>
   
 </section>
@@ -35,11 +35,15 @@ export class HomeComponent {
   housingLocationList: HousingLocation[] = [];
   housingService: HousingService = inject(HousingService);
 
-  constructor(private router: Router) {
-    this.housingLocationList = this.housingService.getAllHousingLocations();
+  constructor() {
+    this.housingService.getAllHousingLocations().then((housingLocationList: HousingLocation[]) => {
+      this.housingLocationList = housingLocationList;
+    })
   }
 
-  goToImageDetail(id: number) {
+  
+
+  goToImageDetail(id: string) {
     this.router.navigate(['/image', id]);
   }
 }

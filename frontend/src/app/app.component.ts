@@ -17,7 +17,6 @@ import { RouterModule, Router } from '@angular/router';
       </a>
       <p> BUENOS DIAS </p>
       <section class="content">
-        <p id="username-container">Chargement...</p>
         <router-outlet></router-outlet>
       </section>
     </main>
@@ -30,7 +29,6 @@ export class AppComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    this.fetchUser();
   }
 
   fetchUser() {

@@ -12,9 +12,9 @@ import { RouterModule } from '@angular/router';
   ],
   template: `
     <section class="listing">
-      <img class="listing-photo" [src]="housingLocation.photo" alt="Exterior photo of {{housingLocation.name}}">
-      <h2 class="listing-heading">{{ housingLocation.name }}</h2>
-      <p class="listing-location">{{ housingLocation.city}}, {{housingLocation.state }}</p>
+      <img class="listing-photo" [src]="housingLocation.image" alt="Exterior photo of {{housingLocation.titre}}">
+      <h2 class="listing-heading">{{ housingLocation.titre }}</h2>
+      <p class="listing-location">{{ housingLocation.description}}, {{housingLocation.date }}</p>
     </section>
   `,
   styleUrls: ['./housing-location.component.css'],
