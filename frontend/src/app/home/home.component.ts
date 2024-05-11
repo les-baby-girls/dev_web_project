@@ -25,6 +25,7 @@ import { Router } from '@angular/router';
     [housingLocation]="housingLocation"
     (click)="goToImageDetail(housingLocation.id)">
   </app-housing-location>
+  
 </section>
   `,
   styleUrls: ['./home.component.css'],

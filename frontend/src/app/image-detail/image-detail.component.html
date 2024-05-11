@@ -10,4 +10,18 @@
         </li>
       </ul>
     </div>
+    <script>
+      window.onload = function() {
+          fetch('http://localhost:3000/utilisateur-connecte')
+              .then(response => response.json())
+              .then(data => {
+                  if (data.username) {
+                      document.getElementById('username-container').innerText = `Utilisateur connecté : ${data.username}`;
+                  } else {
+                      document.getElementById('username-container').innerText = "Aucun utilisateur connecté";
+                  }
+              })
+              .catch(error => console.error('Erreur lors de la récupération de l\'utilisateur connecté :', error));
+      }
+  </script>
 </div>
