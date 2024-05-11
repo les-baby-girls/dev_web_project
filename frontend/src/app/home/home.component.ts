@@ -35,9 +35,10 @@ export class HomeComponent {
   housingLocationList: HousingLocation[] = [];
   housingService: HousingService = inject(HousingService);
 
-  constructor() {
-    this.housingService.getAllHousingLocations().then((housingLocationList: HousingLocation[]) => {
-      this.housingLocationList = housingLocationList;
+  constructor(private router: Router) {
+    this.housingService.getAllHousingLocations().then((housingLocationList: any) => {
+      if (housingLocationList.result === "SUCCESS") this.housingLocationList = housingLocationList.posts;
+      else this.housingLocationList = [];
     })
   }
 

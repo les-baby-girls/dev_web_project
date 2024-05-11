@@ -26,12 +26,13 @@ export class HousingService {
     return []
   }
 
-  async getAllHousingLocations(): Promise<HousingLocation[]> {
+  async getAllHousingLocations(): Promise<any> {
     const data = await fetch("http://localhost:5000/get/posts");
-    return await data.json().posts ?? [];
+    return await data.json() ?? [];
   }
 
-  async getHousingLocationById(id: string): Promise<HousingLocation | undefined> {
+  async getHousingLocationById(id: string): Promise<any> {
     const data = await fetch(`http://localhost:5000/get/post/${id}`);
-    return await data.json().post ?? {};
+    return await data.json() ?? {};
   }
+}
