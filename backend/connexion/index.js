@@ -37,24 +37,24 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
-  function(accessToken, refreshToken, profile, cb) {
-    const newUser = new User({
+  async function(accessToken, refreshToken, profile, cb) {
+    try {
+      let user = await User.findOne({ email: profile.emails[0].value });
+      if (user) {
+        return cb(null, user);
+      }
+      user = new User({
         nom: profile.name.familyName,
         prenom: profile.name.givenName,
         pseudo: profile.displayName,
         email: profile.emails[0].value,
         avatar: profile.photos[0].value
-    });
-
-    newUser.save()
-        .then(user => {
-            console.log("Utilisateur Google enregistré:", user);
-            return cb(null, user);
-        })
-        .catch(err => {
-            console.error("Erreur lors de l'enregistrement de l'utilisateur Google:", err);
-            return cb(err, null);
-        });
+      });
+      await user.save();
+      return cb(null, user);
+    } catch (err) {
+      return cb(err);
+    }
   }
 ));
 
@@ -63,24 +63,25 @@ passport.use(new GitHubStrategy({
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/github/callback"
   },
-  function(accessToken, refreshToken, profile, cb) {
-    const newUser = new User({
+  async function(accessToken, refreshToken, profile, cb) {
+    try {
+      let user = await User.findOne({ pseudo: profile.username });
+      if (user) {
+        return cb(null, user);
+      }
+      user = new User({
         pseudo: profile.username,
-        email: profile._json.email,
+        email: profile._json.email,  // Note: GitHub may not provide an email
         avatar: profile.photos[0].value
-    });
-
-    newUser.save()
-        .then(user => {
-            console.log("Utilisateur GitHub enregistré:", user);
-            return cb(null, user);
-        })
-        .catch(err => {
-            console.error("Erreur lors de l'enregistrement de l'utilisateur GitHub:", err);
-            return cb(err, null);
-        });
+      });
+      await user.save();
+      return cb(null, user);
+    } catch (err) {
+      return cb(err);
+    }
   }
 ));
+
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
@@ -111,7 +112,7 @@ index.get('/', (req, res) => {
 index.get('/utilisateur-connecte', (req, res) => {
     if (req.isAuthenticated()) {
         res.status(200).json({
-            username: req.user.pseudo // ou req.user.pseudo, selon ce que vous utilisez comme nom d'utilisateur
+            username: req.user.pseudo
         });
     } else {
         res.status(404).json({ message: "Utilisateur non connecté" });
@@ -121,25 +122,23 @@ index.get('/utilisateur-connecte', (req, res) => {
 index.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 index.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    const userInfo = {
+    res.redirect(`http://localhost:4200?user=${JSON.stringify({
         nom: req.user.nom,
         prenom: req.user.prenom,
         pseudo: req.user.pseudo,
         email: req.user.email,
         avatar: req.user.avatar
-    };
-    res.redirect(`http://localhost:4200?user=${JSON.stringify(userInfo)}`);
+    })}`);
 });
 
 index.get('/auth/github', passport.authenticate('github'));
 
 index.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
-    const userInfo = {
+    res.redirect(`http://localhost:4200?user=${JSON.stringify({
         pseudo: req.user.pseudo,
         email: req.user.email,
         avatar: req.user.avatar
-    };
-    res.redirect(`http://localhost:4200?user=${JSON.stringify(userInfo)}`);
+    })}`);
 });
 
 index.get('/login', (req, res) => {
@@ -149,7 +148,6 @@ index.get('/login', (req, res) => {
 index.get('/utilisateurs', (req, res) => {
     User.find({}, (err, users) => {
         if (err) {
-            console.error("Erreur lors de la récupération des utilisateurs:", err);
             res.status(500).send('Erreur serveur');
         } else {
             res.status(200).json(users);
@@ -161,8 +159,7 @@ index.get('/utilisateurs/:id', (req, res) => {
     const id = req.params.id;
     User.findById(id, (err, user) => {
         if (err) {
-            console.error("Erreur lors de la récupération de l'utilisateur:", err);
-            res.status(500).send('Erreur serveur');
+            res.status (500).send('Erreur serveur');
         } else {
             if (user) {
                 res.status(200).json(user);
@@ -177,7 +174,6 @@ index.post('/utilisateurs', (req, res) => {
     const newUser = new User(req.body);
     newUser.save((err, user) => {
         if (err) {
-            console.error("Erreur lors de l'ajout de l'utilisateur:", err);
             res.status(500).send('Erreur serveur');
         } else {
             res.status(201).json(user);
@@ -189,7 +185,6 @@ index.put('/utilisateurs/:id', (req, res) => {
     const id = req.params.id;
     User.findByIdAndUpdate(id, req.body, { new: true }, (err, user) => {
         if (err) {
-            console.error("Erreur lors de la modification de l'utilisateur:", err);
             res.status(500).send('Erreur serveur');
         } else {
             if (user) {
@@ -205,7 +200,6 @@ index.delete('/utilisateurs/:id', (req, res) => {
     const id = req.params.id;
     User.findByIdAndDelete(id, (err, user) => {
         if (err) {
-            console.error("Erreur lors de la suppression de l'utilisateur:", err);
             res.status(500).send('Erreur serveur');
         } else {
             res.status(204).send();
