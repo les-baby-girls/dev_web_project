@@ -48,7 +48,7 @@ services:
     restart: always
 
   post:
-    build: ./backend/post
+    build: ./backend/images
     ports:
       - "5000:5000"
     depends_on:
