@@ -3,21 +3,29 @@ version: '3'
 services:
   mysql:
     image: mysql:8.0
+    ports:
+      - "3306:3306"
+    restart: always
     environment:
+      MYSQL_DATABASE: images
       MYSQL_ROOT_PASSWORD: my-secret-pw
     volumes:
       - mysql-data:/var/lib/mysql
 
   mongo:
     image: mongo:4.4
+    ports:
+      - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    restart: always
 
   neo4j:
     image: neo4j:3.5
     ports:
       - "7474:7474"
       - "7687:7687"
+    restart: always
     environment:
       NEO4J_AUTH: neo4j/123Soleil
     volumes:
@@ -29,6 +37,7 @@ services:
       - "8080:8080"
     depends_on:
       - neo4j
+    restart: always
 
   express:
     build: ./backend/connexion
@@ -36,6 +45,7 @@ services:
       - 3000:3000  
     depends_on:
       - mongo
+    restart: always
 
   post:
     build: ./backend/post
@@ -43,11 +53,13 @@ services:
       - "5000:5000"
     depends_on:
       - mysql
+    restart: always
 
   web:
     build: ./frontend
     ports:
       - "4200:4200"
+    restart: always
 
 volumes:
   mysql-data:

@@ -1,0 +1,17 @@
+com\example\restservice\service\PostService.class
+com\example\config\Webconfig.class
+com\example\restservice\json\EditComment.class
+com\example\restservice\json\GetCommentsByPostId.class
+com\example\restservice\json\CreateCommentary.class
+com\example\restservice\repository\CommentRepository.class
+com\example\restservice\repository\PostRepository.class
+com\example\restservice\model\Post.class
+com\example\restservice\RestServiceApplication.class
+com\example\restservice\service\CommentService.class
+com\example\restservice\model\Comment$CommentBuilder.class
+com\example\restservice\json\DeletePost.class
+com\example\restservice\GreetingController.class
+com\example\restservice\json\DeleteComment.class
+com\example\restservice\model\Comment.class
+com\example\restservice\model\Post$PostBuilder.class
+com\example\restservice\json\CreatePost.class

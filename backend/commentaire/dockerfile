@@ -2,9 +2,7 @@ FROM openjdk:21
 
 WORKDIR /app
 
-COPY pom.xml .
-
-COPY target/*.jar .
+COPY . .
 
 EXPOSE 8080
 

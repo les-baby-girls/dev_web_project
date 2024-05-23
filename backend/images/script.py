@@ -10,24 +10,37 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 @app.route('/')
 def index():
     return "Hello, World!"
+
 
 app.config['UPLOAD_FOLDER'] = 'static/images'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+
 def init_db():
-    conn = mysql.connector.connect(user='root', password='my-secret-pw', host='localhost')
-    cursor = conn.cursor()
-    cursor.execute("CREATE DATABASE IF NOT EXISTS images")
-    cursor.execute("USE images")
-    cursor.execute("""
+    conn = mysql.connector.connect(
+        user='root', password='my-secret-pw', host='localhost')
+
+    conn.close()
+
+
+def get_db_connection():
+    try:
+        conn = mysql.connector.connect(
+        user='root', password='my-secret-pw', host='localhost', database='images')
+        cursor = conn.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS images")
+        cursor.execute("USE images")
+        cursor.execute("""
         CREATE TABLE IF NOT EXISTS posts (
             post_id VARCHAR(36) PRIMARY KEY,
             author_id VARCHAR(32),
@@ -36,17 +49,14 @@ def init_db():
             image VARCHAR(255),
             date DATE
         )
-    """)
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-def get_db_connection():
-    try:
-        return mysql.connector.connect(user='root', password='my-secret-pw', host='localhost', database='images')
+        """)
+        conn.commit()
+        cursor.close()
+        return conn
     except Error as e:
         print(f"Error connecting to MySQL: {e}")
         return None
+
 
 def post_exists(post_id):
     conn = get_db_connection()
@@ -59,6 +69,7 @@ def post_exists(post_id):
         return exists
     return False
 
+
 @app.route('/get/post/<post_id>', methods=['GET'])
 def get_post(post_id):
     conn = get_db_connection()
@@ -70,12 +81,13 @@ def get_post(post_id):
         conn.close()
         if post:
             return {
-            "post": post,
-            "result": "SUCCESS"
+                "post": post,
+                "result": "SUCCESS"
             }
 
         return jsonify({"result": "ERROR", "message": "Post not found"})
     return jsonify({"result": "ERROR", "message": "Failed to connect to the database"})
+
 
 @app.route('/get/posts', methods=['GET'])
 def get_posts():
@@ -89,23 +101,24 @@ def get_posts():
         return {
             "posts": post,
             "result": "SUCCESS"
-            }
+        }
     return jsonify({"result": "ERROR", "message": "Failed to connect to the database"})
 
-#edit post
+# edit post
 
 
-#delete post 
+# delete post
 @app.route('/delete/post/<post_id>', methods=['DELETE'])
 def delete_post(post_id):
     print(post_id)
     conn = get_db_connection()
     if conn:
-        
+
         if post_exists(post_id):
-            cursor = conn.cursor(dictionary=True)   
-            
-            cursor.execute("DELETE FROM images.posts WHERE post_id = %s",(post_id,))
+            cursor = conn.cursor(dictionary=True)
+
+            cursor.execute(
+                "DELETE FROM images.posts WHERE post_id = %s", (post_id,))
 
             conn.commit()
             cursor.close()
@@ -125,20 +138,20 @@ def edit_post(post_id):
         description = request.get_json()['description']
     except:
         return jsonify({"result": "ERROR", "message": "Invalid json format"})
-    
+
     conn = get_db_connection()
-    if conn: 
+    if conn:
         if post_exists(post_id):
-            cursor = conn.cursor(dictionary=True)    
+            cursor = conn.cursor(dictionary=True)
 
             post = get_post(post_id)
-            
-            
+
             if not titre:
                 description = post['post']['titre']
             if not description:
                 description = post['post']['description']
-            cursor.execute("UPDATE images.posts SET titre = %s, description = %s WHERE post_id = %s", (titre, description, post_id))
+            cursor.execute(
+                "UPDATE images.posts SET titre = %s, description = %s WHERE post_id = %s", (titre, description, post_id))
 
             conn.commit()
             cursor.close()
@@ -147,7 +160,6 @@ def edit_post(post_id):
         conn.close()
         return jsonify({"result": "ERROR", "message": "Post not found"})
     return jsonify({"result": "ERROR", "message": "Failed to connect to the database"})
-
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -212,7 +224,6 @@ def upload():
         </script>
     ''')
 
-if __name__ == '__main__':
-    init_db()
-    app.run(debug=True, port=5000)
 
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
