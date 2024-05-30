@@ -28,7 +28,7 @@ def allowed_file(filename):
 
 def init_db():
     conn = mysql.connector.connect(
-        user='root', password='my-secret-pw', host='localhost')
+        user='root', password='my-secret-pw', host='mysql')
 
     conn.close()
 
@@ -36,7 +36,7 @@ def init_db():
 def get_db_connection():
     try:
         conn = mysql.connector.connect(
-        user='root', password='my-secret-pw', host='localhost', database='images')
+        user='root', password='my-secret-pw', host='mysql', database='images')
         cursor = conn.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS images")
         cursor.execute("USE images")
