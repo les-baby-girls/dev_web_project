@@ -17,6 +17,56 @@
 <p>Pour stocker les entrées de ces utilisateur nous avons utilisé docker avec un container mongodb sur le port 27017, pour verifier le bon fonctionnement de la base de données nous avons utilisés MongoDB Compass.</p>
 <p>Une fois l'utilisateur connecté il est renvoyé sur la page d'acceuil localhost:4200 </p>
 
+## Fonctionnalités
+
+- **Authentification avec Google et GitHub**
+  - Utilise Passport.js pour l'authentification OAuth
+  - Stocke les informations des utilisateurs authentifiés dans MongoDB
+- **Gestion des Utilisateurs**
+  - Opérations CRUD (Créer, Lire, Mettre à jour, Supprimer) sur les données des utilisateurs
+- **Gestion des Sessions**
+  - Utilise les sessions Express pour gérer les sessions des utilisateurs
+- **Support CORS**
+  - Configuré pour accepter les requêtes provenant de `localhost:4200`
+
+## Technologies Utilisées
+
+- Node.js
+- Express.js
+- Passport.js (pour l'authentification)
+- MongoDB (avec Mongoose pour la gestion des schémas)
+- dotenv (pour la gestion des variables d'environnement)
+- cors (pour le partage des ressources entre origines multiples)
+
+
+## Points de Terminaison de l'API
+
+### Authentification
+
+#### Google
+- `GET /auth/google` - Initie l'authentification Google
+- `GET /auth/google/callback` - Callback OAuth de Google
+
+#### GitHub
+- `GET /auth/github` - Initie l'authentification GitHub
+- `GET /auth/github/callback` - Callback OAuth de GitHub
+
+#### Déconnexion
+- `GET /logout` - Déconnecte l'utilisateur
+
+### Informations Utilisateur
+
+- `GET /utilisateur-connecte` - Vérifie si un utilisateur est authentifié
+- `GET /get-utilisateur-connecte` - Récupère les informations de l'utilisateur authentifié
+
+### Gestion des Utilisateurs
+
+- `GET /utilisateurs` - Récupère tous les utilisateurs
+- `GET /utilisateurs/:id` - Récupère un utilisateur par ID
+- `POST /utilisateurs` - Crée un nouvel utilisateur
+- `PUT /utilisateurs/:id` - Met à jour un utilisateur par ID
+- `DELETE /utilisateurs/:id` - Supprime un utilisateur par ID
+
 <h3>Microservice image</h3>
 
 <p>Dans cette partie l'API flask permet de gérer des images avec des fonctionnalités principales :</p>
