@@ -271,6 +271,7 @@ Dans notre docker-compose, 7 images, 7 conteneurs et 3 volumes seront crées qua
     <li><strong>Gestion de Session</strong> : Problèmes liés à la gestion des sessions utilisateur, affectant l'authentification et la persistance des sessions.
 Synchronisation des Données : Problèmes de synchronisation des données entre le client et le serveur, résultant en des incohérences et des retards dans les mises à jour.
     </li>
+    <li><strong>Liaison entre microservice et base de données en utilisant docker</strong> : Solution => Remplacer localhost par le nom des microservices utilisé.</li>
 </ul>
 
 <h1>Conclusion</h1>
