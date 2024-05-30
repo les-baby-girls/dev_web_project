@@ -17,11 +17,6 @@
 <p>Pour stocker les entrées de ces utilisateur nous avons utilisé docker avec un container mongodb sur le port 27017, pour verifier le bon fonctionnement de la base de données nous avons utilisés MongoDB Compass.</p>
 <p>Une fois l'utilisateur connecté il est renvoyé sur la page d'acceuil localhost:4200 </p>
 
-<h3>Configuration du Serveur</h3>
-<p>Les fichiers de configuration (par exemple, <code>app.js</code> ou <code>server.js</code> dans un projet Node.js) sont utilisés pour initialiser et configurer le serveur. Ces fichiers contiennent la configuration de base du serveur, y compris les middlewares, les routes, et la gestion des erreurs.</p>
-
-
-
 <h3>Microservice image</h3>
 
 <p>Dans cette partie l'API flask permet de gérer des images avec des fonctionnalités principales :</p>
