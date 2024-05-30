@@ -110,6 +110,46 @@ exports.createUser = async (req, res) => {
 
 <p>Le script est bien commenté et organisé de manière à être facilement compréhensible et extensible. Il peut être utilisé comme une base pour construire des applications de gestion d'images plus complexes ou comme point de départ pour d'autres projets Flask.</p>
 
+<h3>Base de données</h3>
+
+<h4>Docker</h4>
+
+<p>Nous avons utilisé docker pour pouvoir déployé plus facilement notre BDD, on a téléchargé l'image MySQL avec la commande suivante:</p>
+
+<pre><code>
+    docker run --name some-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:8.0
+</code></pre>
+<p>On devait utlisé la version 8.0, pour que celle ci soit compatible avec MySQL Workbench.
+Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
+
+<pre><code>
+    def get_db_connection():
+    try:
+        conn = mysql.connector.connect(
+        user='root', password='my-secret-pw', host='localhost', database='images')
+        cursor = conn.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS images")
+        cursor.execute("USE images")
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS posts (
+            post_id VARCHAR(36) PRIMARY KEY,
+            author_id VARCHAR(32),
+            titre VARCHAR(255),
+            description TEXT,
+            image VARCHAR(255),
+            date DATE
+        )
+        """)
+        conn.commit()
+        cursor.close()
+        return conn
+    except Error as e:
+        print(f"Error connecting to MySQL: {e}")
+        return None
+</code></pre>
+
+
+
 <h2>Frontend</h2>
 <p>Le répertoire frontend est responsable de l'interface utilisateur et de l'expérience utilisateur. Les composants principaux incluent :</p>
 
