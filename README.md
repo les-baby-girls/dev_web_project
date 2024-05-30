@@ -85,6 +85,31 @@ exports.createUser = async (req, res) => {
 </code></pre>
 <p>Les contrôleurs sont responsables de la logique d'application, comme la validation des données, l'interaction avec la base de données et le traitement des erreurs.</p>
 
+<h3>API Flask</h3>
+
+<p>Dans cette partie l'API flask permet de gérer des images avec des fonctionnalités principales :</p>
+
+<ul>
+    <li><strong>Téléchargement d'une Image</strong> : Les utilisateurs peuvent télécharger des images en fournissant un titre, une description et leur ID d'auteur.</li>
+    <li><strong>Affichage des Images</strong> : Les utilisateurs peuvent voir toutes les images téléchargées.</li>
+    <li><strong>Suppression d'une Image</strong> : Les utilisateurs peuvent supprimer une image en utilisant son identifiant unique.</li>
+    <li><strong>Modification d'une Image</strong> : Les utilisateurs peuvent modifier le titre et la description d'une image existante.</li>
+</ul>
+
+<p>Le script utilise une base de données MySQL pour stocker les informations sur les images téléchargées. Il comporte également des endpoints API pour interagir avec l'application, permettant ainsi une intégration facile avec d'autres services ou applications front end.</p>
+
+<h3>Routes API</h3>
+
+<ul>
+    <li><code>/upload</code> (POST) : Télécharger une nouvelle image.</li>
+    <li><code>/get/post/&lt;post_id&gt;</code> (GET) : Récupérer les détails d'une image par son identifiant.</li>
+    <li><code>/get/posts</code> (GET) : Récupérer toutes les images.</li>
+    <li><code>/delete/post/&lt;post_id&gt;</code> (DELETE) : Supprimer une image par son identifiant.</li>
+    <li><code>/edit/post/&lt;post_id&gt;</code> (PUT) : Modifier une image par son identifiant.</li>
+</ul>
+
+<p>Le script est bien commenté et organisé de manière à être facilement compréhensible et extensible. Il peut être utilisé comme une base pour construire des applications de gestion d'images plus complexes ou comme point de départ pour d'autres projets Flask.</p>
+
 <h2>Frontend</h2>
 <p>Le répertoire frontend est responsable de l'interface utilisateur et de l'expérience utilisateur. Les composants principaux incluent :</p>
 
