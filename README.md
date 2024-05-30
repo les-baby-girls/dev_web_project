@@ -251,7 +251,7 @@ Une fois le bouton cliqué, ce bouton appelle la fonction <i>redirectToLoginPage
   }
 </code></pre>
 <h4>Affichage des images</h4>
-<p>Pour récupérer les images stockées dans une base de données et ensuite les afficher avec le template, voici la fonction utilisée : </p>
+<p>Sur la page d'accueil, les posts sont affichés ainsi qu'une image, le titre et la date.Pour récupérer les informations sur les posts stockées dans une base de données et ensuite les afficher avec le template, voici la fonction utilisée : </p>
 <pre><code>
     async getAllHousingLocations(): Promise<any> {
     const data = await fetch("http://post:5000/get/posts");
