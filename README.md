@@ -223,7 +223,7 @@ Une fois le bouton cliqué, ce bouton appelle la fonction <i>redirectToLoginPage
 <pre><code>
     &ltbutton class="connect-button" type="button" (click)="redirectToLoginPage()"&gtSe connecter&lt/button&gt
 </code></pre>
-<p>Ce bout de code vérifie qu'un utilisateur est connecté ou non et change l'affichage sur la page d'accueil : </p>
+<p>Ce code vérifie qu'un utilisateur est connecté ou non et change l'affichage sur la page d'accueil pour afficher le nom d'utilisateur : </p>
 <pre><code>
    fetchUser() {
     fetch('http://localhost:3000/utilisateur-connecte')
@@ -251,7 +251,13 @@ Une fois le bouton cliqué, ce bouton appelle la fonction <i>redirectToLoginPage
   }
 </code></pre>
 <h4>Affichage des images</h4>
-<p></p>
+<p>Pour récupérer les images stockées dans une base de données et ensuite les afficher avec le template, voici la fonction utilisée : </p>
+<pre><code>
+    async getAllHousingLocations(): Promise<any> {
+    const data = await fetch("http://post:5000/get/posts");
+    return await data.json() ?? [];
+  }
+</code></pre>
 
 <h2>Docker Compose</h2>
 
