@@ -8,7 +8,14 @@
 </ul>
 
 <h2>Backend</h2>
-<p>Le répertoire backend est crucial pour la gestion des données et la logique métier. Voici les principales composantes d'un back end typique :</p>
+<p>Le répertoire backend est crucial pour la gestion des données et la logique d'une application. Voici les principales composantes de notre backend:</p>
+
+<h3>Connection</h3>
+
+<p>Le microservice s'occupant des connections d'un utilisateur est sous NodeJS, localhost:3000</p>
+<p>Nous avons utilisé les services d'authentification Google, et Github. Pour cela nous avons configurer une application sur ces sites ainsi des URL pour les ridirections</p>
+<p>Pour stocker les entrées de ces utilisateur nous avons utilisé docker avec un container mongodb sur le port 27017, pour verifier le bon fonctionnement de la base de données nous avons utilisés MOngoDB Compass.</p>
+<p>Une fois l'utilisateur connecté il est renvoyé sur la page d'acceuil localhost:4200 </p>
 
 <h3>Configuration du Serveur</h3>
 <p>Les fichiers de configuration (par exemple, <code>app.js</code> ou <code>server.js</code> dans un projet Node.js) sont utilisés pour initialiser et configurer le serveur. Ces fichiers contiennent la configuration de base du serveur, y compris les middlewares, les routes, et la gestion des erreurs.</p>
