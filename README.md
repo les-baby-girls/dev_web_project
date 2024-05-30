@@ -229,33 +229,44 @@ li {
 </code></pre>
 
 <h2>Docker Compose</h2>
-<p>Le fichier <code>docker-compose.yml</code> permet de définir et de lancer des conteneurs Docker pour chaque service de l'application (front end, back end, base de données). Il facilite la configuration et le déploiement des environnements de développement et de production. Un exemple de fichier <code>docker-compose.yml</code> pourrait être :</p>
+<p>Le fichier <code>docker-compose.yml</code> permet de définir et de lancer des conteneurs Docker pour chaque service de l'application (frontend, backend, base de données). Il facilite la configuration et le déploiement des environnements de développement et de production. Dans notre docker-compose.yml, nous allons faire 7 conteneurs:
+    <li>3 pour les bases de données.</li>
+    <li>3 pour les microservices, associés par une base de donnée.</li>
+    <li>Un pour le serveur Angular.</li>
+
+Partie du code:
 <pre><code>
-version: '3.8'
-
+version: '3'
+    
 services:
-  frontend:
-    build: ./frontend
+  mysql:
+    image: mysql:8.0
     ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: images
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+    volumes:
+      - mysql-data:/var/lib/mysql
 
-  backend:
-    build: ./backend
+  post:
+    build: ./backend/images
     ports:
       - "5000:5000"
-    environment:
-      MONGO_URI: mongodb://mongodb:27017/mydatabase
     depends_on:
-      - mongodb
+      - mysql
+    restart: always
 
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
+volumes:
+  mysql-data:
 </code></pre>
 
+Dans cette partie, on fait 2 conteneurs, un serveur pour le microservice du post qui est associé avec un serveur mysql.
+Pour construire le conteneur post, Docker ira dans le dossier ./backend/images/Dockerfile pour construire l'image de post.
+Docker construira automatiquement un volume mysql-data.
+
+Dans notre docker-compose, 7 images, 7 conteneurs et 3 volumes seront crées quand on utilise docker-compose up.
 <h1>Problèmes Rencontrés</h1>
 
 <h2>1. Connexions</h2>
