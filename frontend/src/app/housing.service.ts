@@ -13,7 +13,7 @@ export class HousingService {
   
 
   load(): HousingLocation[] {
-    fetch('http://localhost:5000/get/posts').then(
+    fetch('http://post:5000/get/posts').then(
       response => {
         response.json().then(res => {
           if (res.result === "SUCCESS") {
@@ -27,12 +27,12 @@ export class HousingService {
   }
 
   async getAllHousingLocations(): Promise<any> {
-    const data = await fetch("http://localhost:5000/get/posts");
+    const data = await fetch("http://post:5000/get/posts");
     return await data.json() ?? [];
   }
 
   async getHousingLocationById(id: string): Promise<any> {
-    const data = await fetch(`http://localhost:5000/get/post/${id}`);
+    const data = await fetch(`http://post:5000/get/post/${id}`);
     return await data.json() ?? {};
   }
 }
