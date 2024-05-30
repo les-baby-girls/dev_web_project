@@ -154,54 +154,63 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 <h3>Fichiers HTML/CSS/JavaScript</h3>
 <p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>app.component.ts</code> peut contenir la structure de base de l'application, voici le template créé :</p>
 <pre><code>
-&lt;main&gt;
-  &lt;a [routerLink]="['/']"&gt;
-    &lt;header class="brand-name"&gt;
-      &lt;img class="brand-logo" src="/assets/Pinterest2_Logo.svg.png" alt="logo" aria-hidden="true"&gt;
-      &lt;button class="connect-button" type="button"&gt;Se connecter&lt;/button&gt; &lt;!-- Bouton de connexion --&gt;
-    &lt;/header&gt;
-  &lt;/a&gt;
-  &lt;section class="content"&gt;
-    &lt;router-outlet&gt;&lt;/router-outlet&gt;
-  &lt;/section&gt;
-&lt;/main&gt;
+&lt;section&gt;
+  &lt;form&gt;
+    &lt;input type=&quot;text&quot; placeholder=&quot;Filter by city&quot;&gt;
+    &lt;button class=&quot;primary&quot; type=&quot;button&quot;&gt;Search&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/section&gt;
+&lt;section class=&quot;results&quot;&gt;
+  &lt;app-housing-location
+    *ngFor=&quot;let housingLocation of housingLocationList&quot;
+    [housingLocation]=&quot;housingLocation&quot;
+    (click)=&quot;goToImageDetail(housingLocation.post_id)&quot;&gt;
+  &lt;/app-housing-location&gt;
+&lt;/section&gt;
 </code></pre>
 
 <h3>Assets</h3>
 <p>Contiennent des fichiers statiques tels que des images, des polices et des styles. Par exemple, <code>app.component.css</code> peut contenir les styles de base pour l'application :</p>
 <pre><code>
-:host {
-  --content-padding: 10px;
-  position: relative; /* Ajoutez une position relative au conteneur parent */
+.results {
+  display: grid;
+  column-gap: 14px;
+  row-gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+  margin-top: 50px;
+  justify-content: space-around;
 }
 
-header {
-  display: flex;
-  justify-content: space-between; /* Utilisez justify-content pour aligner les éléments de manière horizontale */
-  align-items: center; /* Utilisez align-items pour aligner les éléments de manière verticale */
-  height: 60px;
-  padding: var(--content-padding);
-  box-shadow: 0px 5px 25px var(--shadow-color);
+input[type="text"] {
+  border: solid 1px var(--primary-color);
+  padding: 10px;
+  border-radius: 8px;
+  margin-right: 4px;
+  display: inline-block;
+  width: 30%;
 }
 
-.brand-name {
-  display: flex;
-  align-items: center; /* Alignez le contenu verticalement */
-}
-
-.brand-logo {
-  width: 20%;
-}
-
-.connect-button {
+button {
   padding: 10px;
   border: solid 1px var(--primary-color);
   background: var(--primary-color);
   color: white;
   border-radius: 8px;
-  position: absolute; /* Position absolue par rapport au conteneur parent */
-  top: calc(var(--content-padding) + 10px); /* Décalage du haut du conteneur parent */
-  right: var(--content-padding); /* Décalage de la droite du conteneur parent */
+}
+
+@media (min-width: 500px) and (max-width: 768px) {
+  .results {
+      grid-template-columns: repeat(2, 1fr);
+  }
+  input[type="text"] {
+      width: 70%;
+  }   
+}
+
+@media (max-width: 499px) {
+  .results {
+      grid-template-columns: 1fr;
+  }    
 }
 </code></pre>
 
