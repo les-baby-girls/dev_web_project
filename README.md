@@ -259,6 +259,18 @@ Une fois le bouton cliqué, ce bouton appelle la fonction <i>redirectToLoginPage
   }
 </code></pre>
 
+<h4>Affichage des commentaires</h4>
+<p>Sur la page détaillée d'un post, nous pouvons voir les commentaires de celui-ci affichés. Les commentaires sont récupérés en effectuant une requête à l'url 'http://commentaire:8080/comments/' en rajoutant l'id du post à la fin. Voici le code : </p>
+<pre><code>
+    fetch('http://commentaire:8080/comments/' + id).then(response => {
+        response.json().then(res => {
+          if (res.resultat == "SUCCESS") {
+            this.comments = res.ListeComment;
+          }
+        })
+      });
+</code></pre>
+
 <h2>Docker Compose</h2>
 
 <p>Le fichier <code>docker-compose.yml</code> permet de définir et de lancer des conteneurs Docker pour chaque service de l'application (frontend, backend, base de données). Il facilite la configuration et le déploiement des environnements de développement et de production. Dans notre docker-compose.yml, nous allons faire 7 conteneurs:
