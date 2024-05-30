@@ -153,19 +153,19 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 
 <h3>Fichiers HTML/CSS/JavaScript</h3>
 <p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>app.component.ts</code> peut contenir la structure de base de l'application, voici le template créé :</p>
-<pre><code>
-    <main>
-      <a [routerLink]="['/']">
-        <header class="brand-name">
-          <img class="brand-logo" src="/assets/Pinterest2_Logo.svg.png" alt="logo" aria-hidden="true">
-          <button class="connect-button" type="button">Se connecter</button> <!-- Bouton de connexion -->
-        </header>
-      </a>
-      <section class="content">
-        <router-outlet></router-outlet>
-      </section>
-    </main>
-</code></pre>
+```html
+<main>
+  <a [routerLink]="['/']">
+    <header class="brand-name">
+      <img class="brand-logo" src="/assets/Pinterest2_Logo.svg.png" alt="logo" aria-hidden="true">
+      <button class="connect-button" type="button">Se connecter</button> <!-- Bouton de connexion -->
+    </header>
+  </a>
+  <section class="content">
+    <router-outlet></router-outlet>
+  </section>
+</main>
+```
 
 <h3>Frameworks et Bibliothèques</h3>
 <p>Par exemple, React, Vue.js ou Angular, utilisés pour créer des applications interactives et réactives. Un exemple d'application React pourrait être :</p>
