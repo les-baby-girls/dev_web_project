@@ -207,6 +207,11 @@ header {
 
 <h3>Liens avec le backend</h3>
 <h2>Docker Compose</h2>
+
+<h3>Liens avec le backend</h3>
+<h4>1. Présentation du bouton de connexion</h4>
+<p>Sur la page d'accueil de notre application, nous avons intégré un bouton de connexion "Se connecter". Ce bouton est un élément interactif du front-end, conçus en utilisant des technologies comme HTML, CSS et JavaScript. Lorsqu'un utilisateur clique sur le bouton, un événement JavaScript est déclenché pour initier le processus de connexion par Google ou Github. </p>
+
 <p>Le fichier <code>docker-compose.yml</code> permet de définir et de lancer des conteneurs Docker pour chaque service de l'application (frontend, backend, base de données). Il facilite la configuration et le déploiement des environnements de développement et de production. Dans notre docker-compose.yml, nous allons faire 7 conteneurs:
     <li>3 pour les bases de données.</li>
     <li>3 pour les microservices, associés par une base de donnée.</li>
