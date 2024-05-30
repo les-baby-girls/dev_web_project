@@ -1,5 +1,23 @@
 <h1>Projet devWeb</h1>
-<p>Ce projet web se compose de plusieurs parties distinctes, chacune ayant un rôle spécifique dans l'architecture globale de l'application. Le projet est divisé en deux parties principales : le front end et le back end, gérés via Docker pour faciliter le déploiement et la gestion des services. Nous détaillerons chaque partie du projet ainsi que les problèmes rencontrés lors du développement.</p>
+<h1>effectué par DINAN OLIVIER, QUERLIER CHARLES-EDOUARD, VANHAECKE LÉO, TRAM OLIVIER</h1>
+<p>Notre projet est d’effectuer un site similaire à Pinterest.
+Voici les fonctionnalités minimales à implémenter :</p>
+<li>Upload d'une image, un titre et une description</li>
+<li>Visualiser et ajouter des commentaires à l'image</li>
+<li>Un système d'authentification basé sur OAuth2 ou OpenId Connect avec Github ou Google</li>
+<li>Lancement de l'application via Docker ou Docker Compose</li>
+<p></p>
+<p>L'application sera composé d'une Interface Homme Machine et de 3 micro-services.</p>
+<p>L'interface sera écrite soit avec Angular, soit avec React soit à l'aide de WebComponents.
+La partie backend sera composée des microservices suivants :</p>
+<li>Un pour la gestion des images</li>
+<li>Un pour les commentaires</li>
+<li>Un pour l'authentification</li>
+<p></p>
+<p>Les microservices doivent être écrit en utilisant Java Spring Boot, NodeJS et Python. Une technologie par microservice. Chaque microservice aura sa propre base de données et la communication se fera en REST.</p>
+<p>Le projet est divisé en deux parties principales : le front end et le back end, gérés via Docker pour faciliter le déploiement et la gestion des services.</p>
+
+<p>Nous détaillerons chaque partie du projet ainsi que les problèmes rencontrés lors du développement.</p>
 
 <h1>Structure du Projet</h1>
 <ul>
