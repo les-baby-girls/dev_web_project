@@ -112,10 +112,7 @@ exports.createUser = async (req, res) => {
 
 <h3>Base de données</h3>
 
-<h4>Docker</h4>
-
 <p>Nous avons utilisé docker pour pouvoir déployé plus facilement notre BDD, on a téléchargé l'image MySQL avec la commande suivante:</p>
-
 <pre><code>
     docker run --name some-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:8.0
 </code></pre>
@@ -148,6 +145,7 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
         return None
 </code></pre>
 
+<p>Nous avons donc un moyen de stocker les images que nous téléchargeons dans une base de données MySQL.</p>
 
 
 <h2>Frontend</h2>
