@@ -13,7 +13,7 @@
 <h3>Connection</h3>
 
 <p>Le microservice s'occupant des connections d'un utilisateur est sous NodeJS, localhost:3000</p>
-<p>Nous avons utilisé les services d'authentification Google, et Github. Pour cela nous avons configurer une application sur ces sites ainsi des URL pour les ridirections</p>
+<p>Nous avons utilisé les services d'authentification Google, et Github. Pour cela nous avons configurer une application sur ces sites ainsi que des URL pour les ridirections</p>
 <p>Pour stocker les entrées de ces utilisateur nous avons utilisé docker avec un container mongodb sur le port 27017, pour verifier le bon fonctionnement de la base de données nous avons utilisés MongoDB Compass.</p>
 <p>Une fois l'utilisateur connecté il est renvoyé sur la page d'acceuil localhost:4200 </p>
 
