@@ -10,9 +10,9 @@ Voici les fonctionnalités minimales à implémenter :</p>
 <p>L'application sera composé d'une Interface Homme Machine et de 3 micro-services.</p>
 <p>L'interface sera écrite avec Angular.
 La partie backend sera composée des microservices suivants :</p>
-<li>Un pour la gestion des images</li>
-<li>Un pour les commentaires</li>
-<li>Un pour l'authentification</li>
+<li>Un microservice pour la gestion des images (Flask) avec sa base de donnée mysql</li>
+<li>Un microservice pour les commentaires (Spring Boot) avec sa base de donnée neo4j</li>
+<li>Un microservice pour l'authentification (NodeJs) avec sa base de donnée MongoDB</li>
 <p></p>
 <p>Les microservices doivent être écrit en utilisant Java Spring Boot, NodeJS et Python. Une technologie par microservice. Chaque microservice aura sa propre base de données et la communication se fera en REST.</p>
 <p>Nous détaillerons chaque partie du projet ainsi que les problèmes rencontrés lors du développement.</p>
