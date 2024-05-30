@@ -154,7 +154,7 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 <h3>Fichiers HTML/CSS/JavaScript</h3>
 <p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>app.component.ts</code> peut contenir la structure de base de l'application, voici le template créé :</p>
 <pre><code>
-<main>
+    <main>
       <a [routerLink]="['/']">
         <header class="brand-name">
           <img class="brand-logo" src="/assets/Pinterest2_Logo.svg.png" alt="logo" aria-hidden="true">
@@ -164,7 +164,7 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
       <section class="content">
         <router-outlet></router-outlet>
       </section>
-</main>
+    </main>
 </code></pre>
 
 <h3>Frameworks et Bibliothèques</h3>
