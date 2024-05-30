@@ -147,6 +147,82 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 
 <p>Nous avons donc un moyen de stocker les images que nous téléchargeons dans une base de données MySQL.</p>
 
+<h3>Microservice commentaire</h3>
+
+<p>Dans cette partie, l'API Springboot permet de gérer les commentaires avec des fonctionnalités suivantes :</p>
+
+<ul>
+    <li><strong>Ajout d'un commentaire</strong> : Les utilisateurs peuvent commenter à un post.</li>
+    <li><strong>Suppression d'un commentaire</strong> : L'utilisateur peut supprimer son commentaire.</li>
+    <li><strong>Modification du commentaire</strong> : Les utilisateurs peuvent modifier leur commentaire.</li>
+    <li><strong>Affichage des commentaires d'un post</strong> : Affiche les commentaires d'un post.</li>
+</ul>
+
+<p>Le microservice commentaire utilise une base de données neo4j pour stocker les commentaires d'un post.</p>
+
+<h3>Routes API</h3>
+<ul>
+    <li><code>/comments/{post_id}</code> (GET): Affiche les commentaires d'un post</li>
+    <li><code>/create/post</code> (POST): Lors de la création d'un post, le backend ajoutera également une bulle post.</li>
+    <li><code>/create/post/comment/{post_id}</code> (POST): Permet de lier la bulle commentaire avec la bulle post correspondant.</li>
+    <li><code>/delete/comment/{comment_id}</code> (DELETE): Permet de supprimer le commentaire d'un post.</li>
+    <li><code>/delete/post/{post_id}</code> (DELETE): Permet de supprimer toutes les commentaires d'un post.</li>
+    <li><code>/edit/comment/{post_id}</code> (PUT): Permet de modifier un commentaire d'un post.</li>
+</ul> 
+
+
+Exemple de réponse de requête:
+<pre><code>
+    POST /create/comment/{post_id}
+    - Entrée:
+    {
+        "author_id": author_id,
+        "text": text_comment
+    }
+    - Sortie:
+    {
+        "result": "SUCCESS",
+        "comment": {
+            "comment_id": "d72566b6-67bd-413f-b7c7-a317181994c6",
+            "author_id": "Louis",
+            "text": "oui",
+            "date": "Thu May 02 15:15:13 NCT 2024"
+        }
+    }
+</code></pre>
+Si la base de donnée fonctionne, le champ result => SUCCESS, sinon ERROR.
+
+<h3>Base de données</h3>
+<p>Pour stocker les commentaires, nous avons utilisé neo4j pour mieux représenter la hiérarchie des post - commentaires.</p>
+<p>Dans notre base de données neo4j, la bulle post se trouve au centre des commentaires liés au post.</p>
+
+<p>Les requêtes neo4j sont écrits en cypher.</p>
+<p>Pour créer un commentaire, il faut faire la requête suivante:</p>
+<pre><code>
+    MATCH (p:Post {post_id: $postId}) CREATE (c:Comment {comment_id: $id, author_id: $author_id, text: $text, date: $date}) CREATE (p)-[:GET_COMMENTED]->(c) RETURN c
+</code></pre>
+
+<p>On cherche le post en fonction de son post_id, ensuite on crée ensuite le commentaire et enfin on fait une liaison entre le post et le commentaire intitulé GET_COMMENTED.</p>
+
+<p>Maintenant pour le représenter sur java:</p>
+<pre><code>
+    @Query("MATCH (p:Post {post_id: $postId}) CREATE (c:Comment {comment_id: $id, author_id: $author_id, text: $text, date: $date}) CREATE (p)-[:GET_COMMENTED]->(c) RETURN c")
+    Mono<Comment> createComment(@Param("postId") String post_id, @Param("id") String comment_id, @Param("author_id") String author_id, @Param("text") String text, @Param("date") String date);
+</code></pre>
+<p>Chaque $ est associé à un nom de variable. Ex: $postId -> String post_id</p>
+<p>Comme ça, on pourra utiliser la fonction pour éxécuter les requêtes cypher.</p>
+<pre><code>
+    public Mono<Comment> createCommentary(String postId, Comment comments) {
+		return commentRepository.createComment(postId, comments.getComment_id(), comments.getAuthor_id(), comments.getText(), comments.getDate());
+	}
+</code></pre>
+
+<p>Pour lier Springboot et neo4j, on rajoute les variables d'environnement suivantes:</p>
+<pre><code>
+    spring.neo4j.uri=bolt://localhost:7687
+    spring.neo4j.authentication.username=neo4j
+    spring.neo4j.authentication.password=123Soleil
+</code></pre>
 
 <h2>Frontend</h2>
 <p>Le répertoire frontend est responsable de l'interface utilisateur et de l'expérience utilisateur. Les composants principaux incluent :</p>
