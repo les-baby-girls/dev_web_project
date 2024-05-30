@@ -28,7 +28,7 @@ export class ImageDetailComponent {
 
 
       // Effectuer la requête HTTP pour récupérer les commentaires
-      fetch('http://localhost:8080/comments/' + id).then(response => {
+      fetch('http://commentaire:8080/comments/' + id).then(response => {
         response.json().then(res => {
           if (res.resultat == "SUCCESS") {
             this.comments = res.ListeComment;
