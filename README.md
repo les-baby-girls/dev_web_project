@@ -152,7 +152,7 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 <p>Le répertoire frontend est responsable de l'interface utilisateur et de l'expérience utilisateur. Les composants principaux incluent :</p>
 
 <h3>Fichiers HTML/CSS/JavaScript</h3>
-<p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>app.component.ts</code> peut contenir la structure de base de l'application, voici le template créé :</p>
+<p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>app.component.ts</code> peut contenir la structure de base de l'application, voici le template créé :
 
 <main>
   <a [routerLink]="['/']">
@@ -165,6 +165,7 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
     <router-outlet></router-outlet>
   </section>
 </main>
+</p>
 
 <h3>Frameworks et Bibliothèques</h3>
 <p>Par exemple, React, Vue.js ou Angular, utilisés pour créer des applications interactives et réactives. Un exemple d'application React pourrait être :</p>
