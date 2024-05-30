@@ -10,7 +10,7 @@
 <h2>Backend</h2>
 <p>Le répertoire backend est crucial pour la gestion des données et la logique d'une application. Voici les principales composantes de notre backend:</p>
 
-<h3>Connection</h3>
+<h3>Microservice connexion</h3>
 
 <p>Le microservice s'occupant des connections d'un utilisateur est sous NodeJS, localhost:3000</p>
 <p>Nous avons utilisé les services d'authentification Google, et Github. Pour cela nous avons configurer une application sur ces sites ainsi que des URL pour les ridirections</p>
@@ -85,7 +85,7 @@ exports.createUser = async (req, res) => {
 </code></pre>
 <p>Les contrôleurs sont responsables de la logique d'application, comme la validation des données, l'interaction avec la base de données et le traitement des erreurs.</p>
 
-<h3>API Flask</h3>
+<h3>Microservice image</h3>
 
 <p>Dans cette partie l'API flask permet de gérer des images avec des fonctionnalités principales :</p>
 
