@@ -207,11 +207,12 @@ header {
 
 <h3>Liens avec le backend</h3>
 
-<h4>Présentation du bouton de connexion</h4>
+<h4>Bouton de connexion</h4>
 <p>Sur la page d'accueil de notre application, nous avons intégré un bouton de connexion "Se connecter". Ce bouton est un élément interactif du front-end, conçus en utilisant des technologies comme HTML, CSS et JavaScript. Lorsqu'un utilisateur clique sur le bouton, un événement JavaScript est déclenché pour initier le processus de connexion par Google ou Github.
 Une fois le bouton cliqué, une requête est envoyée à notre back-end pour obtenir l'URL d'authentification appropriée.</p>
+<p>Voici l'implémentation du bouton de connexion : </p>
 
-<h4></h4>
+<h4>Affichage des images</h4>
 <p></p>
 
 <h2>Docker Compose</h2>
