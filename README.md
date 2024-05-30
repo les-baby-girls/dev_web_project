@@ -167,67 +167,45 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 &lt;/main&gt;
 </code></pre>
 
-<h3>Frameworks et Bibliothèques</h3>
-<p>Par exemple, React, Vue.js ou Angular, utilisés pour créer des applications interactives et réactives. Un exemple d'application React pourrait être :</p>
-<pre><code>
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-
-ReactDOM.render(<App />, document.getElementById('app'));
-</code></pre>
-<p>Et un composant React <code>App.js</code> pourrait ressembler à ceci :</p>
-<pre><code>
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const App = () => {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        axios.get('/api/users')
-            .then(response => setUsers(response.data))
-            .catch(error => console.error(error));
-    }, []);
-
-    return (
-        <div>
-            <h1>User List</h1>
-            <ul>
-                {users.map(user => (
-                    <li key={user._id}>{user.name}</li>
-                ))}
-            </ul>
-        </div>
-    );
-};
-
-export default App;
-</code></pre>
-
 <h3>Assets</h3>
-<p>Contiennent des fichiers statiques tels que des images, des polices et des styles. Par exemple, <code>styles.css</code> peut contenir les styles de base pour l'application :</p>
+<p>Contiennent des fichiers statiques tels que des images, des polices et des styles. Par exemple, <code>app.component.css</code> peut contenir les styles de base pour l'application :</p>
 <pre><code>
-body {
-    font-family: Arial, sans-serif;
+:host {
+  --content-padding: 10px;
+  position: relative; /* Ajoutez une position relative au conteneur parent */
 }
 
-h1 {
-    color: #333;
+header {
+  display: flex;
+  justify-content: space-between; /* Utilisez justify-content pour aligner les éléments de manière horizontale */
+  align-items: center; /* Utilisez align-items pour aligner les éléments de manière verticale */
+  height: 60px;
+  padding: var(--content-padding);
+  box-shadow: 0px 5px 25px var(--shadow-color);
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
+.brand-name {
+  display: flex;
+  align-items: center; /* Alignez le contenu verticalement */
 }
 
-li {
-    padding: 8px;
-    margin-bottom: 4px;
-    background-color: #f0f0f0;
+.brand-logo {
+  width: 20%;
+}
+
+.connect-button {
+  padding: 10px;
+  border: solid 1px var(--primary-color);
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  position: absolute; /* Position absolue par rapport au conteneur parent */
+  top: calc(var(--content-padding) + 10px); /* Décalage du haut du conteneur parent */
+  right: var(--content-padding); /* Décalage de la droite du conteneur parent */
 }
 </code></pre>
 
+<h3>Liens avec le backend</h3>
 <h2>Docker Compose</h2>
 <p>Le fichier <code>docker-compose.yml</code> permet de définir et de lancer des conteneurs Docker pour chaque service de l'application (frontend, backend, base de données). Il facilite la configuration et le déploiement des environnements de développement et de production. Dans notre docker-compose.yml, nous allons faire 7 conteneurs:
     <li>3 pour les bases de données.</li>
