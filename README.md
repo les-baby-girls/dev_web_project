@@ -1,4 +1,4 @@
-<h1>Projet devWeb</h1>
+<h1>Projet Développement Web et Composants Web</h1>
 <h1>Effectué par DINAN OLIVIER, QUERLIER CHARLES-EDOUARD, VANHAECKE LÉO, TRAM OLIVIER, GUYANT BRYAN</h1>
 <p>Notre projet est d’effectuer un site similaire à Pinterest.
 Voici les fonctionnalités minimales à implémenter :</p>
