@@ -20,70 +20,7 @@
 <h3>Configuration du Serveur</h3>
 <p>Les fichiers de configuration (par exemple, <code>app.js</code> ou <code>server.js</code> dans un projet Node.js) sont utilisés pour initialiser et configurer le serveur. Ces fichiers contiennent la configuration de base du serveur, y compris les middlewares, les routes, et la gestion des erreurs.</p>
 
-<h3>Routes</h3>
-<p>Définissent les différents points d'entrée de l'API, permettant de gérer les requêtes HTTP entrantes (GET, POST, PUT, DELETE). Par exemple, un fichier <code>routes.js</code> pourrait contenir :</p>
-<pre><code>
-const express = require('express');
-const router = express.Router();
-const userController = require('./controllers/userController');
 
-router.get('/users', userController.getAllUsers);
-router.post('/users', userController.createUser);
-router.get('/users/:id', userController.getUserById);
-router.put('/users/:id', userController.updateUser);
-router.delete('/users/:id', userController.deleteUser);
-
-module.exports = router;
-</code></pre>
-
-<h3>Modèles</h3>
-<p>Représentent les structures de données de l'application et interagissent avec la base de données. Dans un projet utilisant MongoDB et Mongoose, par exemple, un modèle pourrait ressembler à ceci :</p>
-<pre><code>
-const mongoose = require('mongoose');
-
-const userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-});
-
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
-</code></pre>
-
-<h3>Contrôleurs</h3>
-<p>Contiennent la logique métier pour traiter les requêtes et formuler les réponses appropriées. Un exemple de contrôleur pourrait être :</p>
-<pre><code>
-const User = require('../models/user');
-
-exports.getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find();
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-exports.createUser = async (req, res) => {
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    });
-
-    try {
-        const newUser = await user.save();
-        res.status(201).json(newUser);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-};
-
-// ...other controller methods
-</code></pre>
-<p>Les contrôleurs sont responsables de la logique d'application, comme la validation des données, l'interaction avec la base de données et le traitement des erreurs.</p>
 
 <h3>Microservice image</h3>
 
