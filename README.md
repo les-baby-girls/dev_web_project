@@ -392,7 +392,6 @@ Dans notre docker-compose, 7 images, 7 conteneurs et 3 volumes seront crées qua
 <h3>Problèmes Identifiés :</h3>
 <ul>
     <li><strong>Erreurs de Réseau</strong> : Des problèmes de connexion entre les différents services, souvent causés par des erreurs de configuration des ports ou des conflits de réseau.</li>
-    <li><strong>Gestion des Ports</strong> : Mauvaise configuration des ports exposés dans Docker, empêchant les services de communiquer correctement.</li>
     <li><strong>Middleware d'Authentification</strong> : Difficultés à intégrer et configurer correctement les middlewares de sécurité et d'authentification.</li>
 </ul>
 
