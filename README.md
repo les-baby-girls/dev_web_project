@@ -1,4 +1,4 @@
-<h1>Introduction</h1>
+<h1>Projet devWeb</h1>
 <p>Ce projet web se compose de plusieurs parties distinctes, chacune ayant un rôle spécifique dans l'architecture globale de l'application. Le projet est divisé en deux parties principales : le front end et le back end, gérés via Docker pour faciliter le déploiement et la gestion des services. Nous détaillerons chaque partie du projet ainsi que les problèmes rencontrés lors du développement.</p>
 
 <h1>Structure du Projet</h1>
