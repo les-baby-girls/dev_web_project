@@ -251,7 +251,7 @@ Une fois le bouton cliqué, ce bouton appelle la fonction <i>redirectToLoginPage
   }
 </code></pre>
 <h4>Affichage des images</h4>
-<p>Sur la page d'accueil, les posts sont affichés ainsi qu'une image, le titre et la date.Pour récupérer les informations sur les posts stockées dans une base de données et ensuite les afficher avec le template, voici la fonction utilisée : </p>
+<p>Sur la page d'accueil, les posts sont affichés ainsi qu'une image, le titre et la date. Pour récupérer les informations sur les posts stockées dans une base de données et ensuite les afficher avec le template, voici la fonction utilisée, qui effectue une requûte à l'url "http://post:5000/get/posts" : </p>
 <pre><code>
     async getAllHousingLocations(): Promise<any> {
     const data = await fetch("http://post:5000/get/posts");
@@ -260,7 +260,7 @@ Une fois le bouton cliqué, ce bouton appelle la fonction <i>redirectToLoginPage
 </code></pre>
 
 <h4>Affichage des commentaires</h4>
-<p>Sur la page détaillée d'un post, nous pouvons voir les commentaires de celui-ci affichés. Les commentaires sont récupérés en effectuant une requête à l'url 'http://commentaire:8080/comments/' en rajoutant l'id du post à la fin. Voici le code : </p>
+<p>Sur la page détaillée d'un post, nous pouvons voir les commentaires de celui-ci affichés. Les commentaires sont récupérés en effectuant une requête à l'url "http://commentaire:8080/comments/" en rajoutant l'id du post à la fin. Voici le code : </p>
 <pre><code>
     fetch('http://commentaire:8080/comments/' + id).then(response => {
         response.json().then(res => {
