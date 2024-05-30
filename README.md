@@ -152,21 +152,19 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 <p>Le répertoire frontend est responsable de l'interface utilisateur et de l'expérience utilisateur. Les composants principaux incluent :</p>
 
 <h3>Fichiers HTML/CSS/JavaScript</h3>
-<p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>index.html</code> peut contenir la structure de base de l'application :</p>
+<p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>app.component.ts</code> peut contenir la structure de base de l'application, voici le template créé :</p>
 <pre><code>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web App</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div id="app"></div>
-    <script src="main.js"></script>
-</body>
-</html>
+<main>
+      <a [routerLink]="['/']">
+        <header class="brand-name">
+          <img class="brand-logo" src="/assets/Pinterest2_Logo.svg.png" alt="logo" aria-hidden="true">
+          <button class="connect-button" type="button">Se connecter</button> <!-- Bouton de connexion -->
+        </header>
+      </a>
+      <section class="content">
+        <router-outlet></router-outlet>
+      </section>
+</main>
 </code></pre>
 
 <h3>Frameworks et Bibliothèques</h3>
