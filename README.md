@@ -416,8 +416,9 @@ Synchronisation des Données : Problèmes de synchronisation des données entre 
 <h1>Conclusion</h1>
 <ul>Nous avons rencontré quelques difficultés durant ce projet.</ul>
 <ul><strong>Backend</strong></ul>
-<ul>
-  La partie backend a été pleinement réalisée, avec succès, en particulier le microservice de connexion qui permet l'authentification via les API de Google et GitHub. Les microservices de gestion des images et des commentaires ont également été mis en place, utilisant respectivement Flask et Spring Boot, avec leurs bases de données dédiées.</ul>
+<ul>La partie backend a été pleinement réalisée, avec succès, en particulier le microservice de connexion qui permet l'authentification via les API de Google et GitHub. Les microservices de gestion des images et des commentaires n'ont pas été mis en place correctement, mais la base de données mongodb est gérée correctement, avec les utilisateurs connectés enregistrés.</ul>
 <ul><strong>Frontend</strong></ul>
 <ul>La partie frontend a été partiellement réalisée. Actuellement, elle permet l'affichage des images et l'accès à la fonctionnalité de connexion. Cependant, d'autres fonctionnalités prévues, comme l'ajout et la gestion des commentaires, n'ont pas été implémentées.</ul>
+<p></p>
+<ul>Il y a également eu des problèmes de synchronisations avec la partie de Docker, mais les parties commentaires et connexion fonctionnent</ul>
 <ul>Malgré ces limitations, le projet constitue une base solide pour développer une application similaire à Pinterest, avec une architecture microservices bien définie et déployée via Docker.</ul>
