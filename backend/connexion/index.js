@@ -11,12 +11,12 @@ const index = express();
 index.use(express.json());
 index.use(express.static(path.join(__dirname, 'public')));
 index.use(cors({
-    origin: 'http://localhost:4200', // Autoriser les requêtes depuis localhost:4200
+    origin: 'http://web:4200', // Autoriser les requêtes depuis localhost:4200
     credentials: true // Autoriser les requêtes avec des cookies ou des en-têtes d'autorisation
   }));
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/test');
+mongoose.connect('mongodb://mongodb:27017/test');
 
 const userSchema = new mongoose.Schema({
     nom: String,
@@ -40,7 +40,7 @@ index.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
+    callbackURL: "http://express:3000/auth/google/callback"
   },
   async function(accessToken, refreshToken, profile, cb) {
     try {
@@ -66,7 +66,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/github/callback"
+    callbackURL: "http://express:3000/auth/github/callback"
   },
   async function(accessToken, refreshToken, profile, cb) {
     try {
@@ -126,7 +126,7 @@ index.get('/utilisateur-connecte', (req, res) => {
 });
 
 index.get('/get-utilisateur-connecte', (req, res) => {
-    fetch("http://localhost:3000/utilisateur-connecte")
+    fetch("http://express:3000/utilisateur-connecte")
         .then(response => response.json())
         .then(data => {
             console.log(data)
@@ -149,7 +149,7 @@ index.get('/get-utilisateur-connecte', (req, res) => {
 index.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 index.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect(`http://localhost:4200?user=${JSON.stringify({
+    res.redirect(`http://web:4200?user=${JSON.stringify({
         nom: req.user.nom,
         prenom: req.user.prenom,
         pseudo: req.user.pseudo,
@@ -161,7 +161,7 @@ index.get('/auth/google/callback', passport.authenticate('google', { failureRedi
 index.get('/auth/github', passport.authenticate('github'));
 
 index.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect(`http://localhost:4200?user=${JSON.stringify({
+    res.redirect(`http://web:4200?user=${JSON.stringify({
         pseudo: req.user.pseudo,
         email: req.user.email,
         avatar: req.user.avatar
