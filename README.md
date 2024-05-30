@@ -152,11 +152,11 @@ Depuis l'API flask, on crée nos tables lorsque que celle-ci n'existe pas :</p>
 <p>Le répertoire frontend est responsable de l'interface utilisateur et de l'expérience utilisateur. Les composants principaux incluent :</p>
 
 <h3>Fichiers HTML/CSS/JavaScript</h3>
-<p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>app.component.ts</code> peut contenir la structure de base de l'application, voici le template créé :</p>
+<p>Constituent la base de l'interface utilisateur. Par exemple, le fichier <code>home.component.ts</code> peut contenir la structure de base de l'application, voici le template créé pour afficher les images:</p>
 <pre><code>
 &lt;section&gt;
   &lt;form&gt;
-    &lt;input type=&quot;text&quot; placeholder=&quot;Filter by city&quot;&gt;
+    &lt;input type=&quot;text&quot; placeholder=&quot;Filter by category&quot;&gt;
     &lt;button class=&quot;primary&quot; type=&quot;button&quot;&gt;Search&lt;/button&gt;
   &lt;/form&gt;
 &lt;/section&gt;
@@ -218,9 +218,38 @@ button {
 
 <h4>Bouton de connexion</h4>
 <p>Sur la page d'accueil de notre application, nous avons intégré un bouton de connexion "Se connecter". Ce bouton est un élément interactif du front-end, conçus en utilisant des technologies comme HTML, CSS et JavaScript. Lorsqu'un utilisateur clique sur le bouton, un événement JavaScript est déclenché pour initier le processus de connexion par Google ou Github.
-Une fois le bouton cliqué, une requête est envoyée à notre back-end pour obtenir l'URL d'authentification appropriée.</p>
+Une fois le bouton cliqué, ce bouton appelle la fonction <i>redirectToLoginPage() qui envoie une requête à notre back-end pour obtenir l'URL d'authentification appropriée.</p>
 <p>Voici l'implémentation du bouton de connexion : </p>
-
+<pre><code>
+    &ltbutton class="connect-button" type="button" (click)="redirectToLoginPage()"&gtSe connecter&lt/button&gt
+</code></pre>
+<p>Ce bout de code vérifie qu'un utilisateur est connecté ou non et change l'affichage sur la page d'accueil : </p>
+<pre><code>
+   fetchUser() {
+    fetch('http://localhost:3000/utilisateur-connecte')
+      .then(response => {
+        response.json().then(data => {
+        const userContainer = document.getElementById('username-container');
+        console.log(data)
+        if (userContainer) {
+          console.log(data.username)
+          if (data.username) {
+            userContainer.innerText = `Utilisateur connecté : ${data.username}`;
+          } else {
+            userContainer.innerText = `Utilisateur connecté : ${data}`;
+          }
+        }
+      })
+    })
+      .catch(error => {
+        console.error('Erreur lors de la récupération de l\'utilisateur connecté :', error);
+        const userContainer = document.getElementById('username-container');
+        if (userContainer) { 
+          userContainer.innerText = "Erreur lors de la connexion";
+        }
+      });
+  }
+</code></pre>
 <h4>Affichage des images</h4>
 <p></p>
 
