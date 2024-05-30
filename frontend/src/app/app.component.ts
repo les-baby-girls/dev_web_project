@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   fetchUser() {
-    fetch('http://localhost:3000/utilisateur-connecte')
+    fetch('http://express:3000/utilisateur-connecte')
       .then(response => {
         response.json().then(data => {
         const userContainer = document.getElementById('username-container');
