@@ -1,5 +1,5 @@
 <h1>Projet devWeb</h1>
-<h1>effectué par DINAN OLIVIER, QUERLIER CHARLES-EDOUARD, VANHAECKE LÉO, TRAM OLIVIER</h1>
+<h1>Effectué par DINAN OLIVIER, QUERLIER CHARLES-EDOUARD, VANHAECKE LÉO, TRAM OLIVIER, GUYANT BRYAN</h1>
 <p>Notre projet est d’effectuer un site similaire à Pinterest.
 Voici les fonctionnalités minimales à implémenter :</p>
 <li>Upload d'une image, un titre et une description</li>
@@ -8,15 +8,13 @@ Voici les fonctionnalités minimales à implémenter :</p>
 <li>Lancement de l'application via Docker ou Docker Compose</li>
 <p></p>
 <p>L'application sera composé d'une Interface Homme Machine et de 3 micro-services.</p>
-<p>L'interface sera écrite soit avec Angular, soit avec React soit à l'aide de WebComponents.
+<p>L'interface sera écrite avec Angular.
 La partie backend sera composée des microservices suivants :</p>
 <li>Un pour la gestion des images</li>
 <li>Un pour les commentaires</li>
 <li>Un pour l'authentification</li>
 <p></p>
 <p>Les microservices doivent être écrit en utilisant Java Spring Boot, NodeJS et Python. Une technologie par microservice. Chaque microservice aura sa propre base de données et la communication se fera en REST.</p>
-<p>Le projet est divisé en deux parties principales : le front end et le back end, gérés via Docker pour faciliter le déploiement et la gestion des services.</p>
-
 <p>Nous détaillerons chaque partie du projet ainsi que les problèmes rencontrés lors du développement.</p>
 
 <h1>Structure du Projet</h1>
@@ -33,7 +31,7 @@ La partie backend sera composée des microservices suivants :</p>
 <p>Le microservice s'occupant des connections d'un utilisateur est sous NodeJS, localhost:3000</p>
 <p>Nous avons utilisé les services d'authentification Google, et Github. Pour cela nous avons configurer une application sur ces sites ainsi que des URL pour les ridirections</p>
 <p>Pour stocker les entrées de ces utilisateur nous avons utilisé docker avec un container mongodb sur le port 27017, pour verifier le bon fonctionnement de la base de données nous avons utilisés MongoDB Compass.</p>
-<p>Une fois l'utilisateur connecté il est renvoyé sur la page d'acceuil localhost:4200 </p>
+<p>Une fois l'utilisateur connecté il est renvoyé sur la page d'accueil localhost:4200 </p>
 
 ## Fonctionnalités
 
@@ -383,7 +381,7 @@ volumes:
   mysql-data:
 </code></pre>
 
-Dans cette partie, on fait 2 conteneurs, un serveur pour le microservice du post qui est associé avec un serveur mysql.
+Dans cette partie, nous faisons 2 conteneurs, un serveur pour le microservice du post qui est associé avec un serveur mysql.
 Pour construire le conteneur post, Docker ira dans le dossier ./backend/images/Dockerfile pour construire l'image de post.
 Docker construira automatiquement un volume mysql-data.
 
@@ -417,6 +415,10 @@ Synchronisation des Données : Problèmes de synchronisation des données entre 
 </ul>
 
 <h1>Conclusion</h1>
+<ul>Nous avons rencontré quelques difficultés durant ce projet.</ul>
+<ul><strong>Backend</strong></ul>
 <ul>
-  Le projet présente une structure claire avec une séparation logique entre le front end et le back end, facilitée par l'utilisation de Docker pour la gestion des environnements. Les problèmes rencontrés sont typiques dans le développement de projets web et incluent des défis liés aux connexions réseau, à l'utilisation d'API, et à la communication entre le front end et le back end. Une compréhension approfondie de ces problèmes et de leurs solutions potentielles est essentielle pour améliorer la robustesse et la fiabilité de l'application.
-</ul>
+  La partie backend a été pleinement réalisée, avec succès, en particulier le microservice de connexion qui permet l'authentification via les API de Google et GitHub. Les microservices de gestion des images et des commentaires ont également été mis en place, utilisant respectivement Flask et Spring Boot, avec leurs bases de données dédiées.</ul>
+<ul><strong>Frontend</strong></ul>
+<ul>La partie frontend a été partiellement réalisée. Actuellement, elle permet l'affichage des images et l'accès à la fonctionnalité de connexion. Cependant, d'autres fonctionnalités prévues, comme l'ajout et la gestion des commentaires, n'ont pas été implémentées.</ul>
+<ul>Malgré ces limitations, le projet constitue une base solide pour développer une application similaire à Pinterest, avec une architecture microservices bien définie et déployée via Docker.</ul>
