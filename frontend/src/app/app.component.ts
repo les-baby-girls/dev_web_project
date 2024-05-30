@@ -57,6 +57,6 @@ export class AppComponent implements OnInit {
   }
 
   redirectToLoginPage() {
-    window.location.href = 'http://localhost:3000';
+    window.location.href = 'http://express:3000';
   }
 }
